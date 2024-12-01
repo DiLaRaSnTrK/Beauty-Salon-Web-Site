@@ -23,6 +23,8 @@
     <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
     <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="/styles.css" />
+
 
     <!-- Main CSS File -->
     <link href="/assets/css/main.css" rel="stylesheet">
@@ -65,7 +67,7 @@
 
                 <nav id="navmenu" class="navmenu">
                     <ul>
-                        <li><a href="#hero" class="active">Home<br></a></li>
+                        <li><a  asp-controller="Home" asp-action="Index" class="active">Home<br></a></li>
                         <li><a href="#about">About Us</a></li>
                         <li><a href="#menu">Services</a></li>
                         <li><a href="#specials">H <b style="color:blueviolet">AI</b>R</a></li>
@@ -96,7 +98,7 @@
                     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
                 </nav>
 
-                <a class="btn-book-a-table d-none d-xl-block" href="#book-a-table">Login</a>
+                <a class="btn-book-a-table d-none d-xl-block" asp-controller="Account" asp-action="Login" >Login</a>
 
             </div>
 
@@ -192,8 +194,10 @@
         <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
         <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
 
+
         <!-- Main JS File -->
         <script src="/assets/js/main.js"></script>
+        <script src="/scripts.js"></script>
 
 </body>
 
