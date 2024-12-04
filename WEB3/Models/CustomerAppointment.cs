@@ -8,5 +8,8 @@
         public string approvalStatus { get; set; }
         public int serviceId { get; set; }
         public int employeeId { get; set; }
+
+        public Customer Customer { get; set; }
+        public Appointments Appointment { get; set; }
     }
 }

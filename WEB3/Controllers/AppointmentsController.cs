@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WEB3.Data;  // DbContext sınıfı
 using WEB3.Models;  // Modeller namespace
@@ -7,7 +8,8 @@ namespace WEB3.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AppointmentsController : ControllerBase
+    [Authorize]
+    public class AppointmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
@@ -15,6 +17,68 @@ namespace WEB3.Controllers
         {
             _context = context;
         }
+        [HttpGet]
+        public IActionResult BookAppointment()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult BookAppointment(CustomerAppointment customerAppointment)
+        {
+            if (ModelState.IsValid)
+            {
+                // Randevuyu veritabanına kaydetme işlemi
+                TempData["Message"] = "Randevunuz başarıyla alındı!";
+                return RedirectToAction("MyAppointments");
+            }
+
+            TempData["Error"] = "Randevu alırken bir hata oluştu!";
+            return View();
+        }
+        // Kullanıcının randevularını listele
+        [HttpGet]
+        public IActionResult MyAppointments()
+        {
+            var userId = User.Identity.Name;
+
+            // Kullanıcının randevularını getir
+            var appointments = _context.CustomerAppointments
+                .Include(ca => ca.Appointment)
+                .Include(ca => ca.Customer)
+                .Where(ca => ca.Customer.email == userId)
+                .ToList();
+
+            return View(appointments);
+        }
+        // Yeni Randevu Sayfası
+        /*public IActionResult Create()
+        {
+            // ViewBag ile salon ve hizmet listelerini doldur
+            ViewBag.Salons = _context.Salons.ToList();
+            ViewBag.Services = _context.Services.ToList();
+            ViewBag.Employees = _context.Employees.ToList();
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Appointments appointment)
+        {
+            if (ModelState.IsValid)
+            {
+                // Kullanıcı bilgisini ekle
+                appointment.customerId = (int)(_context.Customers
+                    .FirstOrDefault(c => c.email == User.Identity.Name)?.customerId);
+
+                // Randevuyu kaydet
+                _context.Appointments.Add(appointment);
+                _context.SaveChanges();
+
+                return RedirectToAction("Dashboard", "Customer");
+            }
+            return View(appointment);
+        }*/
 
         // GET: api/Appointment
         [HttpGet]

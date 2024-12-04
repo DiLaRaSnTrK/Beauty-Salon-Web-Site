@@ -1,0 +1,100 @@
+﻿<div class="container mt-5" data-aos="fade-up">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="profile-container">
+                <!-- Profil Başlığı -->
+                <div class="profile-header text-center mb-4">
+                    <h1>Hoş Geldiniz, Dilara!</h1>
+                    <p class="text-muted">Buradan profil bilgilerinizi görüntüleyebilir ve güncelleyebilirsiniz.</p>
+                </div>
+
+                <!-- Profil Bilgileri -->
+                <div class="profile-info">
+                    <form>
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">Ad:</label>
+                            <input type="text" id="firstName" class="form-control" value="Dilara" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Soyad:</label>
+                            <input type="text" id="lastName" class="form-control" value="Şentürk" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-posta:</label>
+                            <input type="email" id="email" class="form-control" value="dilara@example.com" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Telefon:</label>
+                            <input type="tel" id="phone" class="form-control" value="555-123-4567" readonly>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Randevular -->
+                <hr>
+                <div class="appointments">
+                    <h3 class="mb-3">Randevularım</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Hizmet</th>
+                                <th>Tarih</th>
+                                <th>Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Saç Kesimi</td>
+                                <td>10 Aralık 2024 - 14:00</td>
+                                <td>Onaylandı</td>
+                            </tr>
+                            <tr>
+                                <td>Manikür</td>
+                                <td>15 Aralık 2024 - 10:30</td>
+                                <td>Beklemede</td>
+                            </tr>
+                            <tr>
+                                <td>Saç Boyama</td>
+                                <td>20 Aralık 2024 - 13:00</td>
+                                <td>İptal Edildi</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Güncelle Butonu -->
+                <div class="text-center mt-4">
+                    <button class="btn btn-primary" disabled>Bilgilerimi Güncelle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-container {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-header h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .appointments table {
+        margin-top: 20px;
+    }
+
+    .btn-primary {
+        background-color: #4CAF50;
+        border-color: #4CAF50;
+    }
+
+    .btn-primary:hover {
+        background-color: #45a049;
+    }
+</style>

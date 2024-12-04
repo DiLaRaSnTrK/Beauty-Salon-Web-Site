@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WEB3.Data;  // DbContext sınıfı
 using WEB3.Models;  // Modeller namespace
@@ -7,7 +8,8 @@ namespace WEB3.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    [Authorize]
+    public class CustomerController : Controller
     {
         private readonly ApplicationDbContext _context;
 
@@ -15,6 +17,31 @@ namespace WEB3.Controllers
         {
             _context = context;
         }
+
+        [HttpGet]
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+       
+        // Kullanıcı Kontrol Paneli (Dashboard)
+        /*public IActionResult Dashboard()
+        {
+            var userEmail = User.Identity.Name; // Giriş yapan kullanıcının email adresi
+            var appointments = _context.Appointments
+                .Where(a => a.customer.Email == userEmail)
+                .ToList();
+
+            return View(appointments);
+        }
+
+        // Profil sayfası
+        public IActionResult Profile()
+        {
+            var userEmail = User.Identity.Name;
+            var user = _context.Customers.FirstOrDefault(c => c.email == userEmail);
+            return View(user);
+        }*/
 
         // GET: api/Customer
         [HttpGet]

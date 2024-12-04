@@ -7,7 +7,7 @@ namespace YourProjectName.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ServiceController : ControllerBase
+    public class ServiceController : Controller
     {
         private readonly ApplicationDbContext _context;
 

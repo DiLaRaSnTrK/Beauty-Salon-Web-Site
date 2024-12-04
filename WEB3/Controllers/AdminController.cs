@@ -5,9 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace WEB3.Controllers
 {
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
+        public IActionResult Index()
+        {
+            // Hizmet yönetimi sayfası.
+            return View();
+        }
         public IActionResult ManageServices()
         {
             // Hizmet yönetimi sayfası.

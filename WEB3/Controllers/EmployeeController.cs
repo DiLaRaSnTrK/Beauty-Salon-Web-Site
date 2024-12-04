@@ -7,7 +7,7 @@ namespace WEB3.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeController : ControllerBase
+    public class EmployeeController : Controller
     {
         private readonly ApplicationDbContext _context;
 
