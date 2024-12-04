@@ -1,23 +1,34 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WEB3.Models
 {
     public class Appointments
     {
-        public int appointmentId { get; set; }    // Veritabanındaki küçük harflerle uyumlu
-        public int employeeId { get; set; }       // Veritabanındaki küçük harflerle uyumlu
-        public int serviceId { get; set; }        // Veritabanındaki küçük harflerle uyumlu
-        public int customerId { get; set; }       // Veritabanındaki küçük harflerle uyumlu
+        [Key] // appointmentId'nin birincil anahtar olduğunu belirtiyoruz.
+        public int appointmentId { get; set; }
 
-        // time veritabanında integer
-        public int time { get; set; }
+        // Yabancı Anahtarlar
+        public int employeeId { get; set; }    // employeeId'nin, Employee tablosuyla ilişkilendirileceğini belirtmeliyiz
+        public int serviceId { get; set; }     // serviceId'nin, Service tablosuyla ilişkilendirileceğini belirtmeliyiz
+        public int customerId { get; set; }    // customerId'nin, Customer tablosuyla ilişkilendirileceğini belirtmeliyiz
 
-        public int process { get; set; }          // İşlem ID ya da farklı bir mantıkta kullanılabilir
-        public string approvalstatus { get; set; } // Onay durumu
-        public int totalprice { get; set; }       // Toplam fiyat
+        public int time { get; set; }          // Zaman verisi (dakika cinsinden)
+        public int process { get; set; }       // İşlem ID ya da başka bir mantık
+        public string approvalstatus { get; set; }  // Onay durumu
+        public int totalprice { get; set; }    // Toplam fiyat
 
         // time sütununu TimeSpan'e dönüştüren sanal özellik
         [NotMapped] // Veritabanına yansıtılmaz
         public TimeSpan TimeSpanTime => TimeSpan.FromMinutes(time);
+
+        // Navigation properties (yabancı anahtar ilişkileri)
+        public virtual Employee Employee { get; set; }
+        public virtual Services Service { get; set; }
+        public virtual Customer Customer { get; set; }  // Customer ile ilişkiyi burada belirtiyoruz
+
+        // AppointmentStatus ilişkisi
+        public virtual AppointmentStatus approvalStatus { get; set; }
     }
 }
