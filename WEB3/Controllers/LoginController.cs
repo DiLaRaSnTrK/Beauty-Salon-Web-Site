@@ -24,7 +24,7 @@ namespace WEB3.Controllers
         public async Task<IActionResult> Login(string username, string password)
         {
             // Admin giriş kontrolü
-            var admin = await _context.Admins
+            var admin = await _context.admin
                 .FirstOrDefaultAsync(a => a.username == username && a.password == password);
 
             if (admin != null)
@@ -35,7 +35,7 @@ namespace WEB3.Controllers
             }
 
             // Customer giriş kontrolü
-            var customer = await _context.Customers
+            var customer = await _context.customer
                 .FirstOrDefaultAsync(c => c.email == username && c.password == password);
 
             if (customer != null)

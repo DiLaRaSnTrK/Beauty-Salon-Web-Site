@@ -6,16 +6,20 @@ namespace WEB3.Models
     public class AppointmentStatus
     {
         [Key] // approvalStatus sütununu birincil anahtar olarak belirtiyoruz.
-        public string approvalStatus { get; set; }
+        public string approvalstatus { get; set; }
 
-        public int appointmentId { get; set; }
-        public int adminId { get; set; }
+        public int appointmentid { get; set; }
+        public int adminid { get; set; }
 
-        // Yabancı anahtar ilişkileri
-        [ForeignKey("appointmentId")]
-        public virtual Appointments Appointments { get; set; }  // AppointmentStatus ile Appointments arasındaki ilişkiyi belirtiyoruz.
-
-        [ForeignKey("adminId")]
-        public virtual Admin Admins { get; set; }  // AppointmentStatus ile Admin arasındaki ilişkiyi belirtiyoruz.
+      
+        //[ForeignKey("appointmentId")]            // Navigation property for Admin
+       
+        //[ForeignKey("adminId")]
+        // Navigation property for Appointment
+        //public Appointments appointments { get; set; }
+        // Navigation property for Appointments
+        // Navigation properties
+        public Appointments appointments { get; set; }  // Appointment ile ilişki
+        public Admin admin { get; set; }  // Admin ile ilişki
     }
 }

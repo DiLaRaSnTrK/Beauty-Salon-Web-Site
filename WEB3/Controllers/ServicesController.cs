@@ -20,14 +20,14 @@ namespace YourProjectName.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Services>>> GetServices()
         {
-            return await _context.Services.ToListAsync();
+            return await _context.services.ToListAsync();
         }
 
         // GET: api/Service/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Services>> GetService(int id)
         {
-            var service = await _context.Services.FindAsync(id);
+            var service = await _context.services.FindAsync(id);
 
             if (service == null)
             {
@@ -41,17 +41,17 @@ namespace YourProjectName.Controllers
         [HttpPost]
         public async Task<ActionResult<Services>> PostService(Services service)
         {
-            _context.Services.Add(service);
+            _context.services.Add(service);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetService", new { id = service.serviceId }, service);
+            return CreatedAtAction("GetService", new { id = service.serviceid }, service);
         }
 
         // PUT: api/Service/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutService(int id, Services service)
         {
-            if (id != service.serviceId)
+            if (id != service.serviceid)
             {
                 return BadRequest();
             }
@@ -81,13 +81,13 @@ namespace YourProjectName.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteService(int id)
         {
-            var service = await _context.Services.FindAsync(id);
+            var service = await _context.services.FindAsync(id);
             if (service == null)
             {
                 return NotFound();
             }
 
-            _context.Services.Remove(service);
+            _context.services.Remove(service);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -95,7 +95,7 @@ namespace YourProjectName.Controllers
 
         private bool ServiceExists(int id)
         {
-            return _context.Services.Any(e => e.serviceId == id);
+            return _context.services.Any(e => e.serviceid == id);
         }
     }
 }

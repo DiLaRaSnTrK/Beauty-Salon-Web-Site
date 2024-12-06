@@ -20,14 +20,14 @@ namespace WEB3.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AppointmentStatus>>> GetAppointmentStatuses()
         {
-            return await _context.AppointmentStatuses.ToListAsync();
+            return await _context.appointmentstatus.ToListAsync();
         }
 
         // GET: api/AppointmentStatus/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AppointmentStatus>> GetAppointmentStatus(int id)
         {
-            var status = await _context.AppointmentStatuses.FindAsync(id);
+            var status = await _context.appointmentstatus.FindAsync(id);
 
             if (status == null)
             {
@@ -41,10 +41,10 @@ namespace WEB3.Controllers
         [HttpPost]
         public async Task<ActionResult<AppointmentStatus>> PostAppointmentStatus(AppointmentStatus status)
         {
-            _context.AppointmentStatuses.Add(status);
+            _context.appointmentstatus.Add(status);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetAppointmentStatus), new { id = status.approvalStatus }, status);
+            return CreatedAtAction(nameof(GetAppointmentStatus), new { id = status.approvalstatus }, status);
         }
 
         // PUT: api/AppointmentStatus/5
@@ -52,7 +52,7 @@ namespace WEB3.Controllers
         public async Task<IActionResult> PutAppointmentStatus(int id, AppointmentStatus status)
         {
             // Öncelikle verilen id ile mevcut olan AppointmentStatus'u buluyoruz
-            var existingStatus = await _context.AppointmentStatuses.FindAsync(id);
+            var existingStatus = await _context.appointmentstatus.FindAsync(id);
 
             if (existingStatus == null)
             {
@@ -60,7 +60,7 @@ namespace WEB3.Controllers
             }
 
             // Veritabanındaki veriyi güncelliyoruz
-            existingStatus.approvalStatus = status.approvalStatus; // approvalStatus güncellenir
+            existingStatus.approvalstatus = status.approvalstatus; // approvalStatus güncellenir
 
             // Değişiklikleri kaydediyoruz
             _context.Entry(existingStatus).State = EntityState.Modified;
@@ -88,14 +88,14 @@ namespace WEB3.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAppointmentStatus(int id)
         {
-            var status = await _context.AppointmentStatuses.FindAsync(id);
+            var status = await _context.appointmentstatus.FindAsync(id);
             if (status == null)
             {
                 return NotFound(); // Eğer AppointmentStatus bulunamazsa, 404 döner
             }
 
             // AppointmentStatus'u silme işlemi
-            _context.AppointmentStatuses.Remove(status);
+            _context.appointmentstatus.Remove(status);
             await _context.SaveChangesAsync();
 
             return NoContent(); // Silme başarılı olduğunda 204 döner
@@ -105,7 +105,7 @@ namespace WEB3.Controllers
         private bool AppointmentStatusExists(int id)
         {
             // id'nin approvalStatus ile eşleşip eşleşmediğini kontrol et
-            return _context.AppointmentStatuses.Any(e => e.approvalStatus == id.ToString());
+            return _context.appointmentstatus.Any(e => e.approvalstatus == id.ToString());
         }
 
     }

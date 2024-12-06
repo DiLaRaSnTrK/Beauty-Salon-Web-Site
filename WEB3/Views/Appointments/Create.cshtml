@@ -24,17 +24,17 @@
             </div>
             <div class="mb-3">
                 <label for="service" class="form-label">Hizmet Seçiniz</label>
-                <select class="form-select" id="service" name="ServiceId" required>
+                <select class="form-select" id="services" name="serviceid" required>
                     <option selected disabled>Hizmet Seçiniz...</option>
                     @foreach (var service in ViewBag.Services)
                     {
-                        <option value="@service.ServiceId">@service.ServiceName</option>
+                        <option value="@service.serviceid">@service.servicename</option>
                     }
                 </select>
             </div>
             <div class="mb-3">
                 <label for="employee" class="form-label">Çalışan Seçiniz</label>
-                <select class="form-select" id="employee" name="EmployeeId" required>
+                <select class="form-select" id="employees" name="employeeid" required>
                     <option selected disabled>Çalışan Seçiniz...</option>
                     @foreach (var employee in ViewBag.Employees)
                     {

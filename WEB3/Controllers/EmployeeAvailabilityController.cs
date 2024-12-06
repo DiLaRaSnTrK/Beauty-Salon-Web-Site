@@ -20,14 +20,14 @@ namespace WEB3.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmployeeAvailability>>> GetEmployeeAvailabilities()
         {
-            return await _context.EmployeeAvailabilities.ToListAsync();
+            return await _context.employeeavailability.ToListAsync();
         }
 
         // GET: api/EmployeeAvailability/5
         [HttpGet("{id}")]
         public async Task<ActionResult<EmployeeAvailability>> GetEmployeeAvailability(int id)
         {
-            var availability = await _context.EmployeeAvailabilities.FindAsync(id);
+            var availability = await _context.employeeavailability.FindAsync(id);
 
             if (availability == null)
             {
@@ -41,17 +41,17 @@ namespace WEB3.Controllers
         [HttpPost]
         public async Task<ActionResult<EmployeeAvailability>> PostEmployeeAvailability(EmployeeAvailability availability)
         {
-            _context.EmployeeAvailabilities.Add(availability);
+            _context.employeeavailability.Add(availability);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEmployeeAvailability", new { id = availability.availabilityId }, availability);
+            return CreatedAtAction("GetEmployeeAvailability", new { id = availability.availabilityid }, availability);
         }
 
         // PUT: api/EmployeeAvailability/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEmployeeAvailability(int id, EmployeeAvailability availability)
         {
-            if (id != availability.availabilityId)
+            if (id != availability.availabilityid)
             {
                 return BadRequest();
             }
@@ -81,13 +81,13 @@ namespace WEB3.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployeeAvailability(int id)
         {
-            var availability = await _context.EmployeeAvailabilities.FindAsync(id);
+            var availability = await _context.employeeavailability.FindAsync(id);
             if (availability == null)
             {
                 return NotFound();
             }
 
-            _context.EmployeeAvailabilities.Remove(availability);
+            _context.employeeavailability.Remove(availability);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -95,7 +95,7 @@ namespace WEB3.Controllers
 
         private bool EmployeeAvailabilityExists(int id)
         {
-            return _context.EmployeeAvailabilities.Any(e => e.availabilityId == id);
+            return _context.employeeavailability.Any(e => e.availabilityid == id);
         }
     }
 }

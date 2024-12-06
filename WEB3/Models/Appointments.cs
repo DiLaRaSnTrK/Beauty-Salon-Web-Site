@@ -10,9 +10,9 @@ namespace WEB3.Models
         public int appointmentId { get; set; }
 
         // Yabancı Anahtarlar
-        public int employeeId { get; set; }    // employeeId'nin, Employee tablosuyla ilişkilendirileceğini belirtmeliyiz
-        public int serviceId { get; set; }     // serviceId'nin, Service tablosuyla ilişkilendirileceğini belirtmeliyiz
-        public int customerId { get; set; }    // customerId'nin, Customer tablosuyla ilişkilendirileceğini belirtmeliyiz
+        public int employeeid { get; set; }    // employeeId'nin, Employee tablosuyla ilişkilendirileceğini belirtmeliyiz
+        public int serviceid { get; set; }     // serviceId'nin, Service tablosuyla ilişkilendirileceğini belirtmeliyiz
+        public int customerid { get; set; }    // customerId'nin, Customer tablosuyla ilişkilendirileceğini belirtmeliyiz
 
         public int time { get; set; }          // Zaman verisi (dakika cinsinden)
         public int process { get; set; }       // İşlem ID ya da başka bir mantık
@@ -24,11 +24,19 @@ namespace WEB3.Models
         public TimeSpan TimeSpanTime => TimeSpan.FromMinutes(time);
 
         // Navigation properties (yabancı anahtar ilişkileri)
-        public virtual Employee Employee { get; set; }
-        public virtual Services Service { get; set; }
-        public virtual Customer Customer { get; set; }  // Customer ile ilişkiyi burada belirtiyoruz
+        /*public virtual Employees employee { get; set; }
+        public virtual Services service { get; set; }
+        public virtual Customer customer { get; set; }  // Customer ile ilişkiyi burada belirtiyoruz
 
         // AppointmentStatus ilişkisi
-        public virtual AppointmentStatus approvalStatus { get; set; }
+        public virtual AppointmentStatus approvalStatus { get; set; }*/
+        // Navigation property for Employee
+        public Employees employeeids { get; set; }
+
+        // Navigation property for Customer
+        public Customer customerids { get; set; }
+
+        // Navigation property for AppointmentStatus
+        public AppointmentStatus approvalstatuses { get; set; }
     }
 }

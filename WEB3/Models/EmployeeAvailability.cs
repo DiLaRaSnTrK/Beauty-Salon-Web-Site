@@ -1,29 +1,36 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WEB3.Models;
 
 namespace WEB3.Models
 {
     public class EmployeeAvailability
     {
-        [Key] // availabilityId'nin birincil anahtar olduğunu belirtiyoruz.
-        public int availabilityId { get; set; }
+        [Key]
+        public int availabilityid { get; set; } // Birincil Anahtar
 
-        // Yabancı Anahtar
-        public int employeeId { get; set; }  // employeeId'nin, Employee tablosuyla ilişkilendirileceğini belirtmeliyiz.
 
-        // Veritabanında integer olarak tanımlı sütunlar
-        public int startTime { get; set; }  // Zaman başlangıcı (dakika cinsinden)
-        public int endTime { get; set; }    // Zaman bitişi (dakika cinsinden)
+        public int employeeid { get; set; } // Çalışan ID'si
 
-        // Integer değerlerini TimeSpan'e dönüştüren sanal özellikler
-        [NotMapped] // Bu özellik veritabanına yansıtılmaz
-        public TimeSpan StartTime => TimeSpan.FromMinutes(startTime);
 
-        [NotMapped] // Bu özellik veritabanına yansıtılmaz
-        public TimeSpan EndTime => TimeSpan.FromMinutes(endTime);
+        [DataType(DataType.Date)]
+        public DateTime Date { get; set; } // Uygunluk tarihi
 
-        // Navigation property (yabancı anahtar ilişkisi)
-        public virtual Employee Employee { get; set; }  // Employee ile ilişkiyi burada belirtiyoruz
+
+        [DataType(DataType.Time)]
+        public TimeSpan StartTime { get; set; } // Çalışma başlangıç saati
+
+
+        [DataType(DataType.Time)]
+        public TimeSpan EndTime { get; set; } // Çalışma bitiş saati
+
+        // Navigation Property (İlişkili model)
+        //[ForeignKey("employeeid")]
+        //public Employees employees { get; set; } // Çalışan nesnesi ile ilişki
+                                                 // Navigation property for Employee
+        public Employees employeeids { get; set; }
+
     }
 }
+

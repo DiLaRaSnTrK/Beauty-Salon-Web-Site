@@ -43,10 +43,10 @@ namespace WEB3.Controllers
             var userId = User.Identity.Name;
 
             // Kullanıcının randevularını getir
-            var appointments = _context.CustomerAppointments
-                .Include(ca => ca.Appointment)
-                .Include(ca => ca.Customer)
-                .Where(ca => ca.Customer.email == userId)
+            var appointments = _context.customerappointments
+                .Include(ca => ca.appointments)
+                .Include(ca => ca.customer)
+                .Where(ca => ca.customer.email == userId)
                 .ToList();
 
             return View(appointments);
@@ -84,14 +84,14 @@ namespace WEB3.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Appointments>>> GetAppointments()
         {
-            return await _context.Appointments.ToListAsync();
+            return await _context.appointments.ToListAsync();
         }
 
         // GET: api/Appointment/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Appointments>> GetAppointment(int id)
         {
-            var appointment = await _context.Appointments.FindAsync(id);
+            var appointment = await _context.appointments.FindAsync(id);
 
             if (appointment == null)
             {
@@ -105,7 +105,7 @@ namespace WEB3.Controllers
         [HttpPost]
         public async Task<ActionResult<Appointments>> PostAppointment(Appointments appointment)
         {
-            _context.Appointments.Add(appointment);
+            _context.appointments.Add(appointment);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetAppointment), new { id = appointment.appointmentId }, appointment);
@@ -145,13 +145,13 @@ namespace WEB3.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAppointment(int id)
         {
-            var appointment = await _context.Appointments.FindAsync(id);
+            var appointment = await _context.appointments.FindAsync(id);
             if (appointment == null)
             {
                 return NotFound();
             }
 
-            _context.Appointments.Remove(appointment);
+            _context.appointments.Remove(appointment);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -159,7 +159,7 @@ namespace WEB3.Controllers
 
         private bool AppointmentExists(int id)
         {
-            return _context.Appointments.Any(e => e.appointmentId == id);
+            return _context.appointments.Any(e => e.appointmentId == id);
         }
     }
 }

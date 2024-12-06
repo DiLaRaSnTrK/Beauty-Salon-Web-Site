@@ -2,14 +2,17 @@
 {
     public class CustomerAppointment
     {
-        public int customerAppointmentId { get; set; }
-        public int customerId { get; set; }
-        public int appointmentId { get; set; }
-        public string approvalStatus { get; set; }
-        public int serviceId { get; set; }
-        public int employeeId { get; set; }
+        public int customerappointmentid { get; set; }
+        public int customerid { get; set; }
+        public int appointmentid { get; set; }
+        public string approvalstatus { get; set; }
+        public int serviceid { get; set; }
+        public int employeeid { get; set; }
 
-        public Customer Customer { get; set; }
-        public Appointments Appointment { get; set; }
+        // Navigation properties
+        public Customer customer { get; set; }  // Customer ile ilişki
+        public Services services { get; set; }  // Service ile ilişki
+        public Employees employees { get; set; }  // Employee ile ilişki
+        public Appointments appointments { get; set; }  // Appointment ile ilişki
     }
 }
