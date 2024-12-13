@@ -12,5 +12,7 @@ namespace WEB3.Models
         public int serviceduration { get; set; } // Dakika cinsinden süre
 
         public int serviceprice { get; set; }    // Fiyat
+
+        public ICollection<Appointments> appointments { get; set; }
     }
 }

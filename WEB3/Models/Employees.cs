@@ -11,7 +11,7 @@ namespace WEB3.Models
 
         public string firstname { get; set; }
         public string lastname { get; set; }
-        public string email { get; set; }
+      
         public string expertise { get; set; }
 
         public int dailyearnings { get; set; }
@@ -20,12 +20,13 @@ namespace WEB3.Models
         // Eğer availabilityId bir Foreign Key ise:
         [ForeignKey("employeeavailability")] // EmployeeAvailability tablosuna FK
         public int availabilityid { get; set; }
-
+        public int serviceid { get; set; }
         public int prolificacy { get; set; }
         //public virtual ICollection<EmployeeAvailability> employeeavailability { get; set; }
         // Navigation property for EmployeeAvailability
         public EmployeeAvailability employeeavailability { get; set; }
         // Navigation property for Appointments
         public ICollection<Appointments> appointments { get; set; }
+        public Services services { get; set; }  // Employees tablosunda hangi hizmeti verdiğini göstermek için
     }
 }

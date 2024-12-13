@@ -1,9 +1,9 @@
 ﻿@{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Kayıt Ol";
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,68 +32,97 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             width: 350px;
             text-align: center;
-            
         }
 
-        .register-form h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
+            .register-form h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
                 color: #bda2c8;
-        }
+            }
 
-        .register-form input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-        }
+            .register-form input {
+                width: 100%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+            }
 
-        .register-form button {
-            width: 100%;
-            padding: 10px;
-            background-color: #bda2c8;
-            border: none;
-            color: white;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+            .register-form button {
+                width: 100%;
+                padding: 10px;
+                background-color: #bda2c8;
+                border: none;
+                color: white;
+                font-size: 16px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
 
-        .register-form button:hover {
-           background-color: #241f29;
-        }
+                .register-form button:hover {
+                    background-color: #241f29;
+                }
 
         .login-redirect {
             margin-top: 15px;
             font-size: 14px;
         }
 
-        .login-redirect a {
+            .login-redirect a {
                 color: #bda2c8;
-            text-decoration: none;
+                text-decoration: none;
+            }
+
+                .login-redirect a:hover {
+                    text-decoration: underline;
+                }
+
+        /* Hata mesajı stil */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
         }
 
-        .login-redirect a:hover {
-            text-decoration: underline;
+        .success-message {
+            color: lawngreen;
+            font-size: 14px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="register-container">
         <div class="register-form">
-            <h1> Register </h1>
+            <h1> Kayıt Ol </h1>
+
+            <!-- Kayıt formu -->
             <form asp-action="Register" method="post">
-                <input type="text" name="FirstName" placeholder="First Name" required>
-                <input type="text" name="LastName" placeholder="Last Name" required>
-                <input type="email" name="Email" placeholder="E-mail" required>
-                <input type="tel" name="Phone" placeholder="Phone" required>
-                <input type="password" name="Password" placeholder="Password" required>
-                <button type="submit">Register</button>
+                <input type="text" name="FirstName" placeholder="Adınız" required />
+                <input type="text" name="LastName" placeholder="Soyadınız" required />
+                <input type="email" name="Email" placeholder="E-posta" required />
+                <input type="password" name="Password" placeholder="Şifre" required />
+                <button type="submit">Kayıt Ol</button>
             </form>
+
+            <!-- Eğer hata varsa gösterilecek -->
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="error-message">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+            @if (ViewBag.SuccessMessage != null)
+            {
+                <div class="success-message">
+                    @ViewBag.SuccessMessage
+                </div>
+            }
+
+
             <div class="login-redirect">
-                Zaten bir hesabınız var mı? <a asp-action="Login">Login</a>
+                Zaten bir hesabınız var mı? <a asp-action="Login">Giriş Yap</a>
             </div>
         </div>
     </div>

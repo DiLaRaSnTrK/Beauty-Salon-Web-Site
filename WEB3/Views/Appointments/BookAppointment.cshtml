@@ -1,67 +1,43 @@
-﻿<div class="container mt-5" data-aos="fade-up">
-    <div class="row">
-        <div class="col-lg-8 mx-auto">
-            <div class="appointment-container">
-                <!-- Randevu Başlığı -->
-                <div class="appointment-header text-center mb-4">
-                    <h1>Randevu Al</h1>
-                    <p class="text-muted">Buradan yeni bir randevu alabilirsiniz.</p>
-                </div>
+﻿@{
+    ViewData["Title"] = "Randevu Al";
+}
 
-                <!-- Randevu Formu -->
-                <form method="post" asp-action="BookAppointment" asp-controller="Appointments">
-                    <div class="mb-3">
-                        <label for="service" class="form-label">Hizmet Seçin:</label>
-                        <select id="service" name="serviceId" class="form-select">
-                            <option value="1">Saç Kesimi</option>
-                            <option value="2">Manikür</option>
-                            <option value="3">Saç Boyama</option>
-                        </select>
-                    </div>
+<h1>Randevu Al</h1>
 
-                    <div class="mb-3">
-                        <label for="employee" class="form-label">Çalışan Seçin:</label>
-                        <select id="employee" name="employeeId" class="form-select">
-                            <option value="1">Ahmet</option>
-                            <option value="2">Ayşe</option>
-                        </select>
-                    </div>
+@if (ViewBag.ErrorMessage != null)
+{
+    <div style="color: red;">@ViewBag.ErrorMessage</div>
+}
 
-                    <div class="mb-3">
-                        <label for="appointmentTime" class="form-label">Tarih ve Saat:</label>
-                        <input type="datetime-local" id="appointmentTime" name="appointmentTime" class="form-control" required>
-                    </div>
+@if (ViewBag.SuccessMessage != null)
+{
+    <div style="color: green;">@ViewBag.SuccessMessage</div>
+}
 
-                    <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-primary">Randevu Al</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+<form asp-action="BookAppointment" method="post">
+    <div>
+        <label for="ServiceId">Hizmet:</label>
+        <select name="ServiceId" id="ServiceId" required>
+            <option value="">Bir hizmet seçin</option>
+            @foreach (var service in (List<WEB3.Models.Services>)ViewBag.Services)
+            {
+                <option value="@service.serviceid">@service.servicename</option>
+            }
+        </select>
     </div>
-</div>
-
-<style>
-    .appointment-container {
-        margin-top:70px;
-        background-color: #ffffff;
-        border-radius: 10px;
-        padding: 30px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .appointment-header h1 {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .btn-primary {
-        background-color: #4CAF50;
-        border-color: #4CAF50;
-    }
-
-    .btn-primary:hover {
-        background-color: #45a049;
-    }
-</style>
+    <div>
+        <label for="EmployeeId">Çalışan:</label>
+        <select name="EmployeeId" id="EmployeeId" required>
+            <option value="">Bir çalışan seçin</option>
+            @foreach (var employee in (List<WEB3.Models.Employees>)ViewBag.Employees)
+            {
+                <option value="@employee.employeeid">@employee.firstname @employee.lastname</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label for="AppointmentDateTime">Tarih ve Saat:</label>
+        <input type="datetime-local" name="AppointmentDateTime" id="AppointmentDateTime" required />
+    </div>
+    <button type="submit">Randevu Al</button>
+</form>

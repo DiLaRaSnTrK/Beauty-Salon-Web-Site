@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WEB3.Data;
+using WEB3.Models;
 
 namespace WEB3.Controllers
 {
@@ -19,21 +20,20 @@ namespace WEB3.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Login(string username, string password)
+        public async Task<IActionResult> Login(string username, string password)
         {
-            // Veritabanında username ve password eşleşmesini kontrol ediyoruz
+            // Kullanıcıyı kontrol et
             var customer = _context.customer
                 .FirstOrDefault(c => c.email == username && c.password == password);
-
             var admin = _context.admin
-                    .FirstOrDefault(a => a.username == username && a.password == password);
+                .FirstOrDefault(a => a.username == username && a.password == password);
 
             if (customer != null)
             {
-                // Eğer müşteri bulunduysa admin olup olmadığını kontrol ediyoruz
+                // Giriş yapan kullanıcı bilgilerini Session'da saklamak
+                HttpContext.Session.SetInt32("CustomerId", customer.customerid);
 
-
-                // Eğer admin değilse Profile sayfasına yönlendir
+                // Profil sayfasına yönlendiriyoruz
                 return RedirectToAction("Profile", "Account");
             }
             else if (admin != null)
@@ -43,7 +43,6 @@ namespace WEB3.Controllers
             }
             else
             {
-                // Eşleşme yoksa hata mesajı ile tekrar Login sayfasına dön
                 ViewBag.ErrorMessage = "Kullanıcı adı veya şifre hatalı.";
                 return View();
             }
@@ -55,15 +54,95 @@ namespace WEB3.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(string name, string email, string password)
+        public IActionResult Register(string firstName, string lastName, string email, string phone, string password)
         {
-            // Kayıt işlemleri burada yapılır.
-            return RedirectToAction("Login");
+            // Aynı e-posta ile kayıtlı kullanıcı olup olmadığını kontrol et
+            var existingCustomer = _context.customer
+                .FirstOrDefault(c => c.email == email);
+
+            if (existingCustomer != null)
+            {
+                ViewBag.ErrorMessage = "Bu e-posta adresi ile zaten bir hesap bulunmaktadır.";
+                return View(); // Hata mesajı ile aynı sayfayı yeniden yükler
+            }
+
+            // Yeni müşteri oluştur
+            var newCustomer = new Customer
+            {
+                firstname = firstName,
+                lastname = lastName,
+                email = email,
+                password = password,  // Şifreyi burada düz şekilde kaydediyoruz. Güvenlik için şifreyi hashleyin.
+                isactive = true // Kullanıcı aktif olarak işaretlenebilir.
+            };
+
+            // Yeni kullanıcıyı veritabanına ekle
+            _context.customer.Add(newCustomer);
+            _context.SaveChanges();
+            ViewBag.SuccessMessage = "Kayıt işleminiz başarıyla tamamlandı! Lütfen giriş yapın.";
+
+            return View();
         }
 
         public IActionResult Profile()
         {
+            // Session'dan müşteri bilgilerini alıyoruz
+            var customerId = HttpContext.Session.GetInt32("CustomerId");
+            var customerName = HttpContext.Session.GetString("CustomerName");
+            var customerSurname = HttpContext.Session.GetString("CustomerSurname");
+            var customerEmail = HttpContext.Session.GetString("CustomerEmail");
+
+
+            // Bilgileri View'da gösterebilmek için ViewBag kullanıyoruz
+            ViewBag.customerid = customerId;
+            ViewBag.firstname = customerName;
+            ViewBag.lastname = customerSurname;
+            ViewBag.email = customerEmail;
+
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BookAppointment(int serviceId, int employeeId, DateTime appointmentDateTime)
+        {
+            // Giriş yapan kullanıcının customerId'sini alıyoruz
+            int? customerId = HttpContext.Session.GetInt32("CustomerId");
+
+            if (customerId == null)
+            {
+                // Giriş yapmamış kullanıcıyı giriş sayfasına yönlendiriyoruz
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Randevu bilgilerini API'ye göndermek için nesne oluşturuyoruz
+            var appointmentRequest = new AppointmentRequest
+            {
+                customerid = customerId.Value,
+                serviceid = serviceId,
+                employeeid = employeeId,
+                AppointmentDateTime = appointmentDateTime
+            };
+
+            // API'ye veri göndermek için HttpClient kullanıyoruz
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://yourapiurl/api/appointments"); // API base adresinizi buraya ekleyin
+                var response = await client.PostAsJsonAsync("book", appointmentRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Randevu başarıyla alındı
+                    ViewBag.SuccessMessage = "Randevunuz başarıyla alındı!";
+                    return RedirectToAction("AppointmentSuccess"); // Başarı sayfasına yönlendirme
+                }
+                else
+                {
+                    // API'den hata mesajı alındığında
+                    ViewBag.ErrorMessage = "Randevu alırken bir hata oluştu.";
+                    return View();
+                }
+            }
+
         }
     }
 }

@@ -69,6 +69,13 @@ namespace WEB3.Data
                 .HasForeignKey(a => a.employeeid)  // employeeId'nin yabancı anahtar olduğunu belirtiyoruz
                 .OnDelete(DeleteBehavior.Cascade);  // Employee silindiğinde ilgili Appointment'lar da silinsin
 
+            // Appointments ve Employees arasındaki ilişki
+            modelBuilder.Entity<Appointments>()
+                .HasOne(a => a.serviceids)  // Appointments ile Employee arasında ilişki
+                .WithMany()  // Employee, birçok Appointment'a sahip olabilir
+                .HasForeignKey(a => a.serviceid)  // employeeId'nin yabancı anahtar olduğunu belirtiyoruz
+                .OnDelete(DeleteBehavior.Cascade);  // Employee silindiğinde ilgili Appointment'lar da silinsin
+
             // Appointments ve Customers arasındaki ilişki
             modelBuilder.Entity<Appointments>()
                 .HasOne(a => a.customerids)  // Appointments ile Customer arasında ilişki
@@ -109,7 +116,11 @@ namespace WEB3.Data
                 .WithMany()  // Appointment, birçok CustomerAppointments'e sahip olabilir
                 .HasForeignKey(ca => ca.appointmentid)  // appointmentId'nin yabancı anahtar olduğunu belirtiyoruz
                 .OnDelete(DeleteBehavior.Cascade);
-
+            modelBuilder.Entity<Employees>()
+                .HasOne(e => e.services) // Employees tablosu Services ile ilişki kurar
+                .WithMany() // Services birden fazla Employee ile ilişkilidir
+                .HasForeignKey(e => e.serviceid) // Foreign key alanı
+                .OnDelete(DeleteBehavior.Restrict); // Silme davranışı
 
 
 

@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WEB3.Data;  // DbContext sınıfı
 using WEB3.Models;  // Modeller namespace
+using System.Linq;
 
 namespace WEB3.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
+ 
     public class AppointmentsController : Controller
     {
+
         private readonly ApplicationDbContext _context;
 
         public AppointmentsController(ApplicationDbContext context)
@@ -20,146 +20,64 @@ namespace WEB3.Controllers
         [HttpGet]
         public IActionResult BookAppointment()
         {
+            // Hizmetler ve çalışanlar listesini View'a gönderiyoruz
+            ViewBag.Services = _context.services.ToList();
+            ViewBag.Employees = _context.employees.ToList();
             return View();
         }
 
         [HttpPost]
-        public IActionResult BookAppointment(CustomerAppointment customerAppointment)
+        public IActionResult BookAppointment(int ServiceId, int EmployeeId, DateTime AppointmentDateTime)
         {
-            if (ModelState.IsValid)
+            // Kullanıcı giriş yapmış mı kontrol et
+            int? customerid = HttpContext.Session.GetInt32("Customerid");
+            if (customerid == null)
             {
-                // Randevuyu veritabanına kaydetme işlemi
-                TempData["Message"] = "Randevunuz başarıyla alındı!";
-                return RedirectToAction("MyAppointments");
+                return RedirectToAction("Login", "Account");
             }
 
-            TempData["Error"] = "Randevu alırken bir hata oluştu!";
-            return View();
-        }
-        // Kullanıcının randevularını listele
-        [HttpGet]
-        public IActionResult MyAppointments()
-        {
-            var userId = User.Identity.Name;
+            // Çalışanın seçilen tarih ve saatte uygunluğunu kontrol et
+            var isAvailable = !_context.appointments.Any(a =>
+                a.employeeid == EmployeeId &&
+                a.AppointmentDateTime == AppointmentDateTime);
 
-            // Kullanıcının randevularını getir
-            var appointments = _context.customerappointments
-                .Include(ca => ca.appointments)
-                .Include(ca => ca.customer)
-                .Where(ca => ca.customer.email == userId)
-                .ToList();
-
-            return View(appointments);
-        }
-        // Yeni Randevu Sayfası
-        /*public IActionResult Create()
-        {
-            // ViewBag ile salon ve hizmet listelerini doldur
-            ViewBag.Salons = _context.Salons.ToList();
-            ViewBag.Services = _context.Services.ToList();
-            ViewBag.Employees = _context.Employees.ToList();
-
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Create(Appointments appointment)
-        {
-            if (ModelState.IsValid)
+            if (!isAvailable)
             {
-                // Kullanıcı bilgisini ekle
-                appointment.customerId = (int)(_context.Customers
-                    .FirstOrDefault(c => c.email == User.Identity.Name)?.customerId);
-
-                // Randevuyu kaydet
-                _context.Appointments.Add(appointment);
-                _context.SaveChanges();
-
-                return RedirectToAction("Dashboard", "Customer");
-            }
-            return View(appointment);
-        }*/
-
-        // GET: api/Appointment
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Appointments>>> GetAppointments()
-        {
-            return await _context.appointments.ToListAsync();
-        }
-
-        // GET: api/Appointment/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Appointments>> GetAppointment(int id)
-        {
-            var appointment = await _context.appointments.FindAsync(id);
-
-            if (appointment == null)
-            {
-                return NotFound();
+                ViewBag.ErrorMessage = "Seçilen çalışan bu tarihte uygun değil.";
+                ViewBag.Services = _context.services.ToList();
+                ViewBag.Employees = _context.employees.ToList();
+                return View();
             }
 
-            return appointment;
-        }
+            // Yeni randevuyu oluştur
+            var appointment = new Appointments
+            {
+                customerid = customerid.Value,
+                serviceid = ServiceId,
+                employeeid = EmployeeId,
+                AppointmentDateTime = AppointmentDateTime
+            };
 
-        // POST: api/Appointment
-        [HttpPost]
-        public async Task<ActionResult<Appointments>> PostAppointment(Appointments appointment)
-        {
             _context.appointments.Add(appointment);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetAppointment), new { id = appointment.appointmentId }, appointment);
+            ViewBag.SuccessMessage = "Randevunuz başarıyla oluşturuldu!";
+            return RedirectToAction("BookAppointment");
         }
 
-        // PUT: api/Appointment/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAppointment(int id, Appointments appointment)
+
+
+
+        /*public IActionResult MyAppointments()
         {
-            if (id != appointment.appointmentId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(appointment).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AppointmentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE: api/Appointment/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAppointment(int id)
-        {
-            var appointment = await _context.appointments.FindAsync(id);
-            if (appointment == null)
-            {
-                return NotFound();
-            }
-
-            _context.appointments.Remove(appointment);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool AppointmentExists(int id)
-        {
-            return _context.appointments.Any(e => e.appointmentId == id);
-        }
+            int customerId = int.Parse(HttpContext.Session.GetString("CustomerId"));
+            var appointments = _context.appointments
+                .Where(a => a.customerid == customerId)
+                .Include(a => a.employeeid)
+                .ToList();
+            return View(appointments);
+        }*/
     }
+
 }
+
