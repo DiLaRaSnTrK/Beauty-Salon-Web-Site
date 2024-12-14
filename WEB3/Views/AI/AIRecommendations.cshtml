@@ -1,0 +1,135 @@
+﻿@{
+    ViewData["Title"] = "AI Hair Recommendations";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="col-md-6">
+            <h1 class="text-center mb-4" style="font-size: 2.5rem; font-weight: bold; color: white;">
+                AI Haircut & Color Recommendations
+            </h1>
+            <div class="card p-4 shadow-lg">
+                <form id="uploadForm" enctype="multipart/form-data" class="text-center">
+                    <div class="mb-4">
+                        <input type="file" id="imageFile" name="image" accept="image/*" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Get Recommendations</button>
+                </form>
+            </div>
+            <div id="result" class="result mt-4" style="display: none;">
+                <div class="alert alert-info">
+                    <strong>Recommended Style:</strong> <span id="styleResult"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("uploadForm");
+    const resultDiv = document.getElementById("result");
+    //const styleResult = document.getElementById("styleResult");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        const fileInput = document.getElementById("imageFile");
+        formData.append("image", fileInput.files[0]);
+
+        try {
+            const response = await fetch('/AI/AnalyzeImage', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                resultDiv.style.display = "block";
+                styleResult.innerHTML = data.recommendation;
+            } else {
+                resultDiv.style.display = "block";
+                resultDiv.innerHTML = `<strong>Error:</strong> ${data.message}`;
+                //resultDiv.classList.add("alert-danger");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            /*resultDiv.style.display = "block";
+            styleResult.innerHTML = `<strong>Error:</strong> Something went wrong, please try again later.`;
+            resultDiv.classList.add("alert-danger");*/
+        }
+    });
+</script>
+
+<style>
+    /* Sayfa Tam Genişlik ve Yükseklik için Stil */
+    .container-fluid {
+        padding: 0;
+        margin: 0;
+        height: 100vh; /* Yüksekliği tüm ekran boyunca uzat */
+        background: url("/assets/img/ai.webp") no-repeat center center fixed;
+        background-size: cover;
+    }
+
+    .row {
+        height: 100%; /* Tüm yükseklik kullanılsın */
+    }
+
+    .card {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border-color: #E739AF;
+ 
+    }
+
+    .btn-primary {
+        background-color: #122A93;
+        border-color: #1F49FF;
+        padding: 10px 20px;
+        border-radius: 5px;
+        
+    }
+
+        .btn-primary:hover {
+            background-color: #5a31a2;
+            border-color: #5a31a2;
+        }
+
+    .form-control {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    #result {
+        max-width: 600px;
+        margin: 30px auto;
+        text-align: center;
+    }
+
+    .alert-info {
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+        color: #0c5460;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+
+    .col-md-6 {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    h1 {
+        font-size: 2.5rem; /* Başlık font boyutunu artırdım */
+        font-weight: bold; /* Başlık yazısını kalınlaştırdım */
+        color: white; /* Başlık rengini değiştirdim */
+        text-shadow: 3px 3px 5px #E739AF; /* Başlığa gölge efekti ekledim */
+        
+    }
+</style>
