@@ -77,12 +77,12 @@ namespace WEB3.Data
                 .OnDelete(DeleteBehavior.Cascade);  // Employee silindiğinde ilgili Appointment'lar da silinsin
 
             // Appointments ve Customers arasındaki ilişki
-            modelBuilder.Entity<Appointments>()
+            /*modelBuilder.Entity<Appointments>()
                 .HasOne(a => a.customerids)  // Appointments ile Customer arasında ilişki
                 .WithMany()  // Customer, birçok Appointment'a sahip olabilir
                 .HasForeignKey(a => a.customerid)  // customerId'nin yabancı anahtar olduğunu belirtiyoruz
                 .OnDelete(DeleteBehavior.Cascade);  // Customer silindiğinde ilgili Appointment'lar da silinsin
-
+            
             // Appointments ve AppointmentStatus arasındaki ilişki
             modelBuilder.Entity<Appointments>()
                 .HasOne(a => a.approvalstatuses)  // Appointments ile AppointmentStatus arasında ilişki
@@ -90,6 +90,7 @@ namespace WEB3.Data
                 .HasForeignKey(a => a.approvalstatus)  // appointmentStatusId'nin yabancı anahtar olduğunu belirtiyoruz
                 .OnDelete(DeleteBehavior.Cascade);
             // CustomerAppointments ve Customer arasındaki ilişkiyi tanımlıyoruz
+            */
             modelBuilder.Entity<CustomerAppointment>()
                 .HasOne(ca => ca.customer)  // CustomerAppointments ile Customer arasında ilişki
                 .WithMany()  // Customer, birçok CustomerAppointments'e sahip olabilir
@@ -122,7 +123,16 @@ namespace WEB3.Data
                 .HasForeignKey(e => e.serviceid) // Foreign key alanı
                 .OnDelete(DeleteBehavior.Restrict); // Silme davranışı
 
-
+            modelBuilder.Entity<Employees>()
+               .HasOne(e => e.services)
+               .WithMany(s => s.employees)
+               .HasForeignKey(e => e.serviceid)
+               .OnDelete(DeleteBehavior.SetNull); // İlişki silindiğinde NULL yapar
+            modelBuilder.Entity<Employees>()
+               .HasOne(e => e.employeeavailability)
+               .WithMany(a => a.Employees)
+               .HasForeignKey(e => e.availabilityid)
+               .OnDelete(DeleteBehavior.SetNull); // NULL kabul edilebilir
 
 
         }

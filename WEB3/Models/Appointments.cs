@@ -16,23 +16,16 @@ namespace WEB3.Models
         public int customerid { get; set; }    // customerId'nin, Customer tablosuyla ilişkilendirileceğini belirtmeliyiz
 
       
-        public List<Services> services { get; set; } // Yapılacak işlemler
+        public List<Services> services { get; set; }  // Yapılacak işlemler
         public List<Employees> employees { get; set; } // Çalışanlar
-        
 
-        public string firstname { get; set; }
-        public string lastname { get; set; }
-        public string email { get; set; }
 
-        public DateTime AppointmentDateTime { get; set; }
+        public DateTime appointmentdatetime { get; set; }
 
         public Services serviceids { get; set; }
 
-        public int duration { get; set; }
         public int totalprice { get; set; }
 
-        public DateTime date { get; set; }
-        public TimeSpan time { get; set; }
         public int process { get; set; }       // İşlem ID ya da başka bir mantık
         public string approvalstatus { get; set; }  // Onay durumu
 
@@ -40,10 +33,10 @@ namespace WEB3.Models
         public Employees employeeids { get; set; }
 
         // Navigation property for Customer
-        public Customer customerids { get; set; }
+        //public Customer customerids { get; set; }
 
         // Navigation property for AppointmentStatus
-        public AppointmentStatus approvalstatuses { get; set; }
+        //public AppointmentStatus approvalstatuses { get; set; }
 
      
     }

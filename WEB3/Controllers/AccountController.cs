@@ -34,7 +34,7 @@ namespace WEB3.Controllers
                 HttpContext.Session.SetInt32("CustomerId", customer.customerid);
 
                 // Profil sayfasına yönlendiriyoruz
-                return RedirectToAction("Profile", "Account");
+                return RedirectToAction("BookAppointment", "Appointments");
             }
             else if (admin != null)
             {
@@ -106,9 +106,17 @@ namespace WEB3.Controllers
         public async Task<IActionResult> BookAppointment(int serviceId, int employeeId, DateTime appointmentDateTime)
         {
             // Giriş yapan kullanıcının customerId'sini alıyoruz
-            int? customerId = HttpContext.Session.GetInt32("CustomerId");
+            int? customerid = HttpContext.Session.GetInt32("CustomerId");
+            if (customerid.HasValue)
+            {
+                Console.WriteLine($"CustomerId: {customerid.Value}");
+            }
+            else
+            {
+                Console.WriteLine("CustomerId bulunamadı.");
+            }
 
-            if (customerId == null)
+            if (customerid == null)
             {
                 // Giriş yapmamış kullanıcıyı giriş sayfasına yönlendiriyoruz
                 return RedirectToAction("Login", "Account");
@@ -117,7 +125,7 @@ namespace WEB3.Controllers
             // Randevu bilgilerini API'ye göndermek için nesne oluşturuyoruz
             var appointmentRequest = new AppointmentRequest
             {
-                customerid = customerId.Value,
+                customerid = customerid.Value,
                 serviceid = serviceId,
                 employeeid = employeeId,
                 AppointmentDateTime = appointmentDateTime

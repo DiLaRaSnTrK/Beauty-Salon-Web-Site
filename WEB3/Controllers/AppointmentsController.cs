@@ -27,10 +27,18 @@ namespace WEB3.Controllers
         }
 
         [HttpPost]
-        public IActionResult BookAppointment(int ServiceId, int EmployeeId, DateTime AppointmentDateTime)
+        public IActionResult BookAppointment(int ServiceId, int EmployeeId, DateTime AppointmentDateTime, int serviceduration, int serviceprice)
         {
             // Kullanıcı giriş yapmış mı kontrol et
-            int? customerid = HttpContext.Session.GetInt32("Customerid");
+            int? customerid = HttpContext.Session.GetInt32("CustomerId");
+            if (customerid.HasValue)
+            {
+                Console.WriteLine($"CustomerId: {customerid.Value}");
+            }
+            else
+            {
+                Console.WriteLine("CustomerId bulunamadı.");
+            }
             if (customerid == null)
             {
                 return RedirectToAction("Login", "Account");
@@ -39,7 +47,7 @@ namespace WEB3.Controllers
             // Çalışanın seçilen tarih ve saatte uygunluğunu kontrol et
             var isAvailable = !_context.appointments.Any(a =>
                 a.employeeid == EmployeeId &&
-                a.AppointmentDateTime == AppointmentDateTime);
+                a.appointmentdatetime == AppointmentDateTime.ToUniversalTime());
 
             if (!isAvailable)
             {
@@ -54,8 +62,11 @@ namespace WEB3.Controllers
             {
                 customerid = customerid.Value,
                 serviceid = ServiceId,
+                totalprice = serviceprice,
                 employeeid = EmployeeId,
-                AppointmentDateTime = AppointmentDateTime
+                process= serviceduration,
+                approvalstatus="beklemede",
+                appointmentdatetime = AppointmentDateTime.ToUniversalTime()
             };
 
             _context.appointments.Add(appointment);

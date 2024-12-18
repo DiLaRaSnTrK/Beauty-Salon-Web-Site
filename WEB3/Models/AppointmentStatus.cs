@@ -8,7 +8,7 @@ namespace WEB3.Models
         [Key] // approvalStatus sütununu birincil anahtar olarak belirtiyoruz.
         public string approvalstatus { get; set; }
 
-        public int appointmentid { get; set; }
+        //public int appointmentid { get; set; }
         public int adminid { get; set; }
 
       
@@ -19,7 +19,7 @@ namespace WEB3.Models
         //public Appointments appointments { get; set; }
         // Navigation property for Appointments
         // Navigation properties
-        public Appointments appointments { get; set; }  // Appointment ile ilişki
+       // public Appointments appointments { get; set; }  // Appointment ile ilişki
         public Admin admin { get; set; }  // Admin ile ilişki
     }
 }

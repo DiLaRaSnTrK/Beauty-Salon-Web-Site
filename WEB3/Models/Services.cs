@@ -14,5 +14,6 @@ namespace WEB3.Models
         public int serviceprice { get; set; }    // Fiyat
 
         public ICollection<Appointments> appointments { get; set; }
+        public ICollection<Employees> employees { get; set; } // İlişki tanımı
     }
 }
