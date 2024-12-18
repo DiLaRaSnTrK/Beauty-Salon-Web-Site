@@ -30,6 +30,7 @@ namespace WEB3.Models
         //public Employees employees { get; set; } // Çalışan nesnesi ile ilişki
                                                  // Navigation property for Employee
         public Employees employeeids { get; set; }
+        public ICollection<Employees> Employees { get; set; }
 
     }
 }

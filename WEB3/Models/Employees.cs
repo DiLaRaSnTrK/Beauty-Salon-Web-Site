@@ -21,7 +21,8 @@ namespace WEB3.Models
         [ForeignKey("employeeavailability")] // EmployeeAvailability tablosuna FK
         public int availabilityid { get; set; }
         public int serviceid { get; set; }
-        public int prolificacy { get; set; }
+        public int? prolificacy { get; set; } // Nullable int
+
         //public virtual ICollection<EmployeeAvailability> employeeavailability { get; set; }
         // Navigation property for EmployeeAvailability
         public EmployeeAvailability employeeavailability { get; set; }

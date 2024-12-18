@@ -2,6 +2,7 @@
     ViewData["Title"] = "AI Hair Recommendations";
 }
 
+
 <div class="container-fluid">
     <div class="row justify-content-center align-items-center" style="min-height: 100vh;">
         <div class="col-md-6">
@@ -9,9 +10,9 @@
                 AI Haircut & Color Recommendations
             </h1>
             <div class="card p-4 shadow-lg">
-                <form id="uploadForm" enctype="multipart/form-data" class="text-center">
+                <form method="post" asp-controller="AI" asp-action="Analyze" id="uploadForm" enctype="multipart/form-data" class="text-center">
                     <div class="mb-4">
-                        <input type="file" id="imageFile" name="image" accept="image/*" class="form-control" required>
+                        <input type="file" id="file" name="file" accept="image/*" class="form-control" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Get Recommendations</button>
                 </form>
@@ -25,40 +26,12 @@
     </div>
 </div>
 
-<script>
-    const form = document.getElementById("uploadForm");
-    const resultDiv = document.getElementById("result");
-    //const styleResult = document.getElementById("styleResult");
 
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        const fileInput = document.getElementById("imageFile");
-        formData.append("image", fileInput.files[0]);
 
-        try {
-            const response = await fetch('/AI/AnalyzeImage', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-
-            if (data.success) {
-                resultDiv.style.display = "block";
-                styleResult.innerHTML = data.recommendation;
-            } else {
-                resultDiv.style.display = "block";
-                resultDiv.innerHTML = `<strong>Error:</strong> ${data.message}`;
-                //resultDiv.classList.add("alert-danger");
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            /*resultDiv.style.display = "block";
-            styleResult.innerHTML = `<strong>Error:</strong> Something went wrong, please try again later.`;
-            resultDiv.classList.add("alert-danger");*/
-        }
-    });
-</script>
+@if (ViewBag.Error != null)
+{
+    <p style="color: red;">@ViewBag.Error</p>
+}
 
 <style>
     /* Sayfa Tam Genişlik ve Yükseklik için Stil */

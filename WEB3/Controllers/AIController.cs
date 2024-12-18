@@ -1,97 +1,78 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Linq;
+using System.Collections.Generic;
 
-[Route("AI")]
 public class AIController : Controller
 {
-    // Azure Face API anahtarınız ve endpoint adresinizi burada sabit olarak tanımlayabilirsiniz
-    private readonly string _faceApiKey = "4Xt7e2iPDSJO7wh4gROY8p18IFEZIMFyYH92PXK0jaOMMp7GZxxhJQQJ99ALACYeBjFXJ3w3AAAKACOGEkta"; // Azure Face API Key
-    private readonly string _faceApiEndpoint = "https://hair.cognitiveservices.azure.com/"; // Azure Face API Endpoint
+    private readonly HttpClient _httpClient;
 
-    // GetRequest - AI Haircut & Color Recommendation Form Sayfasını Yüklemek için kullanılır
-    [HttpGet("GetRecommendations")]
-    public IActionResult AIRecommendations()
+    public AIController(HttpClient httpClient)
     {
-        // Form sayfasını yüklemek için kullanılır
+        _httpClient = httpClient;
+    }
+
+    [HttpGet]
+    public IActionResult Index()
+    {
         return View();
     }
 
-    // AnalyzeImage - Yüklenen resmi işleyip öneri döndüren işlev
-    [HttpPost("AnalyzeImage")]
-    public async Task<IActionResult> AnalyzeImage()
+    [HttpPost]
+    public async Task<IActionResult> Analyze(IFormFile file)
     {
-        // Form üzerinden gelen dosyayı alıyoruz
-        var file = Request.Form.Files["image"];
         if (file == null || file.Length == 0)
         {
-            return Json(new { success = false, message = "No image file provided." });
+            ViewBag.Error = "Dosya yüklenmedi.";
+            return View("Index");
         }
 
-        try
+        using var content = new MultipartFormDataContent();
+        using var fileStream = file.OpenReadStream();
+        var fileContent = new StreamContent(fileStream);
+        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpg");
+        content.Add(fileContent, "file", file.FileName);
+
+        // Python API'ye istek gönderme
+        var response = await _httpClient.PostAsync("http://localhost:5000/analyze", content);
+
+        if (!response.IsSuccessStatusCode)
         {
-            // HTTPClient kullanarak Azure API'ye istek gönderiyoruz
-            using (var httpClient = new HttpClient())
-            {
-                // Azure API'ye erişim için gerekli API anahtarını header'a ekliyoruz
-                httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _faceApiKey);
-
-                // Azure API'ye gönderilecek URL
-                var url = $"{_faceApiEndpoint}/face/v1.0/detect?returnFaceAttributes=age,gender,hair";
-                using (var content = new MultipartFormDataContent())
-                {
-                    // Yüklenen resmin stream'ini alıyoruz
-                    var stream = file.OpenReadStream();
-                    var fileContent = new StreamContent(stream);
-                    fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
-                    content.Add(fileContent, "image", file.FileName);
-
-                    // Azure API'ye istek gönderiyoruz
-                    var response = await httpClient.PostAsync(url, content);
-                    var responseString = await response.Content.ReadAsStringAsync();
-
-                    // Başarısız durum kontrolü
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        return Json(new { success = false, message = "Face API error: " + responseString });
-                    }
-
-                    // API'den dönen veriyi işliyoruz
-                    var faceData = JsonConvert.DeserializeObject<dynamic>(responseString);
-                    if (faceData.Count > 0)
-                    {
-                        // Saç rengi ve tipine göre basit öneri
-                        var hairAttributes = faceData[0].faceAttributes.hair;
-                        string recommendation;
-
-                        // Öneriler saç tipine göre
-                        if (hairAttributes.bald > 0.5)
-                        {
-                            recommendation = "Consider a clean-shaven look or short hair.";
-                        }
-                        else if (hairAttributes.hairColor.Count > 0)
-                        {
-                            recommendation = $"Try a hairstyle emphasizing {hairAttributes.hairColor[0].color}.";
-                        }
-                        else
-                        {
-                            recommendation = "You have versatile hair! Explore different styles.";
-                        }
-
-                        // Öneriyi JSON formatında geri döndürüyoruz
-                        return Json(new { success = true, recommendation });
-                    }
-                    else
-                    {
-                        return Json(new { success = false, message = "No face detected in the image." });
-                    }
-                }
-            }
+            var error = await response.Content.ReadAsStringAsync();
+            ViewBag.Error = $"Hata: {error}";
+            Console.WriteLine($"API Error: {error}");
+            return View("Index");
         }
-        catch (System.Exception ex)
+
+        var responseString = await response.Content.ReadAsStringAsync();
+        Console.WriteLine($"API Response: {responseString}");
+
+        // JSON yanıtını JsonDocument ile parse etme
+        using (var jsonDoc = JsonDocument.Parse(responseString))
         {
-            return Json(new { success = false, message = "Error: " + ex.Message });
+            var root = jsonDoc.RootElement;
+
+            // Saç rengi önerisini alma
+            var suggestion = root.GetProperty("suggestion").GetString();
+            var avgColor = root.GetProperty("avg_color").EnumerateArray();
+
+            // Konsola yazdırma
+            Console.WriteLine($"Suggested Hair Color: {suggestion}");
+
+            // AvgColor dizisini almak ve her bir öğeyi double olarak almak
+            var avgColorList = avgColor.Select(c => c.GetDouble()).ToList();
+            Console.WriteLine($"AvgColor: {string.Join(", ", avgColorList)}");
+
+            // Sonuçları ViewBag'e aktar
+            ViewBag.Suggestion = suggestion;
+            ViewBag.AvgColor = avgColorList.Any()
+                ? string.Join(", ", avgColorList)
+                : "Renk bilgisi bulunamadı.";
         }
+
+        return View("Result");
     }
 }

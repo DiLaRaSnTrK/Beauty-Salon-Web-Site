@@ -122,7 +122,16 @@ namespace WEB3.Data
                 .HasForeignKey(e => e.serviceid) // Foreign key alanı
                 .OnDelete(DeleteBehavior.Restrict); // Silme davranışı
 
-
+            modelBuilder.Entity<Employees>()
+               .HasOne(e => e.services)
+               .WithMany(s => s.employees)
+               .HasForeignKey(e => e.serviceid)
+               .OnDelete(DeleteBehavior.SetNull); // İlişki silindiğinde NULL yapar
+            modelBuilder.Entity<Employees>()
+               .HasOne(e => e.employeeavailability)
+               .WithMany(a => a.Employees)
+               .HasForeignKey(e => e.availabilityid)
+               .OnDelete(DeleteBehavior.SetNull); // NULL kabul edilebilir
 
 
         }
