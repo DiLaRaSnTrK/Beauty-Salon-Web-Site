@@ -2,6 +2,7 @@
     ViewData["Title"] = "Randevu Al";
 }
 
+<<<<<<< HEAD
 
 <head>
     <style>
@@ -11,6 +12,12 @@
             
             font-family: Arial, sans-serif;
         }
+=======
+@if (ViewBag.ErrorMessage != null)
+{
+    <div style="color: red;">@ViewBag.ErrorMessage</div>
+}
+>>>>>>> 3f7af79ccd0f54135590c7226f2301a6b4f55e50
 
         .getAappointment-container {
             display: flex;
@@ -96,6 +103,94 @@
 
 </head>
 
+<head>
+    <style>
+        .getAappointment-container .body {
+            margin: 0;
+            padding: 0;
+            
+            font-family: Arial, sans-serif;
+        }
+
+        .getAappointment-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url("/assets/img/salon/appointment.png") no-repeat center center fixed;
+            background-size: auto;
+        }
+
+            .getAappointment-container .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+            .getAappointment-container .container h1 {
+                font-size: 28px;
+                margin-bottom: 20px;
+                color: #bda2c8;
+            }
+
+            .getAappointment-container .form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+            .getAappointment-container .label {
+            font-weight: bold;
+            color: #bda2c8;
+            margin-bottom: 5px;
+            text-align: left; /* Etiketleri sola hizalama */
+        }
+
+            .getAappointment-container .input, .getAappointment-container .select {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+            .getAappointment-container .button {
+            width: 100%;
+            padding: 12px;
+            background-color: #bda2c8;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .button:hover {
+                background-color: #241f29;
+            }
+
+        .getAappointment-container .container .error, .container .success {
+            font-size: 16px;
+            margin: 15px 0;
+            color: white;
+        }
+
+        .getAappointment-container .error {
+            color: red;
+        }
+
+        .getAappointment-container .success {
+            color: green;
+        }
+    </style>
+
+</head>
+
 <form asp-action="BookAppointment" method="post">
     <div class="getAappointment-container">
         <div class="container">
@@ -103,6 +198,7 @@
             <form class="form">
                 <div>
                     <label class="label" for="ServiceId">Hizmet:</label>
+<<<<<<< HEAD
                     <select name="ServiceId" id="ServiceId" required class="input" onchange="updateServiceDetails(); filterEmployees();">
 
                         <option value="">Bir hizmet seçin</option>
@@ -124,21 +220,39 @@
                     </div>
                 </div>
 
+=======
+                    <select name="ServiceId" id="ServiceId" required class="input">
+                        <option value="">Bir hizmet seçin</option>
+                        @foreach (var service in (List<WEB3.Models.Services>)ViewBag.Services)
+                        {
+                            <option value="@service.serviceid">@service.servicename</option>
+                        }
+                    </select>
+                </div>
+>>>>>>> 3f7af79ccd0f54135590c7226f2301a6b4f55e50
                 <div>
                     <label class="label" for="EmployeeId">Çalışan:</label>
                     <select name="EmployeeId" id="EmployeeId" required class="input">
                         <option value="">Bir çalışan seçin</option>
                         @foreach (var employee in (List<WEB3.Models.Employees>)ViewBag.Employees)
                         {
+<<<<<<< HEAD
                             <option value="@employee.employeeid" data-serviceid="@employee.serviceid">@employee.firstname @employee.lastname</option>
                         }
                     </select>
                 </div>
 
+=======
+                            <option value="@employee.employeeid">@employee.firstname @employee.lastname</option>
+                        }
+                    </select>
+                </div>
+>>>>>>> 3f7af79ccd0f54135590c7226f2301a6b4f55e50
                 <div>
                     <label class="label" for="AppointmentDateTime">Tarih ve Saat:</label>
                     <input type="datetime-local" name="AppointmentDateTime" id="AppointmentDateTime" required class="input" />
                 </div>
+<<<<<<< HEAD
                 <div>
                     <button type="submit" class="button">Randevu Al</button>
                 </div>
@@ -157,6 +271,12 @@
                     @ViewBag.SuccessMessage
                 </div>
             }
+=======
+                <div >
+                    <button type="submit" class="button">Randevu Al</button>
+                </div>
+            </form>
+>>>>>>> 3f7af79ccd0f54135590c7226f2301a6b4f55e50
         </div>
     </div>
 </form>
