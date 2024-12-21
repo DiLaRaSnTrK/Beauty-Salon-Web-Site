@@ -1,0 +1,30 @@
+﻿@model WEB3.Models.Employees
+
+<h2>Edit Employee</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="employeeid" />
+    
+    <div>
+        <label asp-for="firstname">First Name</label>
+        <input type="text" asp-for="firstname" />
+    </div>
+
+    <div>
+        <label asp-for="lastname">Last Name</label>
+        <input type="text" asp-for="lastname" />
+    </div>
+
+    <div>
+        <label asp-for="skills">Skills</label>
+        <input type="text" asp-for="skills" />
+    </div>
+
+    <div>
+        <label asp-for="expertise">Expertise</label>
+        <input type="text" asp-for="expertise" />
+    </div>
+
+
+    <button type="submit">Save Changes</button>
+</form>

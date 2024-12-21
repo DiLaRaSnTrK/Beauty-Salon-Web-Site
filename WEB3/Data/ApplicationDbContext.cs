@@ -55,12 +55,7 @@ namespace WEB3.Data
                 .HasForeignKey(ea => ea.employeeid)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Employee ve EmployeeAvailability arasındaki ilişkiyi tanımlıyoruz
-            modelBuilder.Entity<Employees>()
-                .HasOne(e => e.employeeavailability)
-                .WithOne()
-                .HasForeignKey<Employees>(e => e.availabilityid)
-                .OnDelete(DeleteBehavior.Cascade);
+           
 
             // Appointments ve Employees arasındaki ilişki
             modelBuilder.Entity<Appointments>()
@@ -128,11 +123,7 @@ namespace WEB3.Data
                .WithMany(s => s.employees)
                .HasForeignKey(e => e.serviceid)
                .OnDelete(DeleteBehavior.SetNull); // İlişki silindiğinde NULL yapar
-            modelBuilder.Entity<Employees>()
-               .HasOne(e => e.employeeavailability)
-               .WithMany(a => a.Employees)
-               .HasForeignKey(e => e.availabilityid)
-               .OnDelete(DeleteBehavior.SetNull); // NULL kabul edilebilir
+           
 
 
         }

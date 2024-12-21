@@ -12,16 +12,16 @@ namespace WEB3.Models
         public string firstname { get; set; }
         public string lastname { get; set; }
       
-        public string expertise { get; set; }
+        public string? expertise { get; set; }
 
         public int dailyearnings { get; set; }
-        public string skills { get; set; }
+        public string? skills { get; set; }
 
         // Eğer availabilityId bir Foreign Key ise:
         [ForeignKey("employeeavailability")] // EmployeeAvailability tablosuna FK
-        public int availabilityid { get; set; }
+
         public int serviceid { get; set; }
-        public int? prolificacy { get; set; } // Nullable int
+        public decimal? prolificacy { get; set; } // Nullable int
 
         //public virtual ICollection<EmployeeAvailability> employeeavailability { get; set; }
         // Navigation property for EmployeeAvailability

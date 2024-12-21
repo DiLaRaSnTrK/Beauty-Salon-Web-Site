@@ -4,7 +4,26 @@ using WEB3.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddHttpClient();
+
+
+// CORS ve diðer servisleri burada ekleyin
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// Diðer servisleri ekleyin
+builder.Services.AddControllers();
+
+
+
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -26,20 +45,24 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddHttpContextAccessor();
 
+
 var app = builder.Build();
+// Middleware'leri burada kullanýn
+app.UseCors("AllowAll");
 
+app.UseRouting();
+app.UseAuthorization();
 
+app.MapControllers(); // API route'larýný etkinleþtirme
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
 
 // Oturum ve kimlik doðrulama middleware'leri
 app.UseSession();
 app.UseAuthentication();
-app.UseAuthorization();
 
-app.MapControllers(); // API route'larýný etkinleþtirme
+
 app.MapDefaultControllerRoute(); // Varsayýlan route (MVC kullanýmý için)
 
 // Session'ý kullanabilmek için bu middleware eklenmeli

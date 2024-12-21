@@ -22,7 +22,7 @@ namespace WEB3.Models
 
         public DateTime appointmentdatetime { get; set; }
 
-        public Services serviceids { get; set; }
+        public virtual Services serviceids { get; set; }
 
         public int totalprice { get; set; }
 
@@ -30,14 +30,21 @@ namespace WEB3.Models
         public string approvalstatus { get; set; }  // Onay durumu
 
 
-        public Employees employeeids { get; set; }
-
+        public virtual Employees employeeids { get; set; }
+        public virtual Customer customerids { get; set; }   // Customer ilişkisi
+        
+        [NotMapped]
+        public string CustomerName { get; set; }
+        [NotMapped]
+        public string EmployeeName { get; set; }
+        [NotMapped]
+        public string ServiceName { get; set; }
         // Navigation property for Customer
         //public Customer customerids { get; set; }
 
         // Navigation property for AppointmentStatus
         //public AppointmentStatus approvalstatuses { get; set; }
 
-     
+
     }
 }

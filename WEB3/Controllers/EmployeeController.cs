@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WEB3.Data;
 using WEB3.Models;
 
 namespace WEB3.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class EmployeeController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -15,87 +13,102 @@ namespace WEB3.Controllers
         {
             _context = context;
         }
-
-        // GET: api/Employee
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employees>>> GetEmployees()
+        // Çalışanları listele
+        public IActionResult EmployeeOperations()
         {
-            return await _context.employees.ToListAsync();
+            var employees = _context.employees.ToList(); // Veritabanından çalışanları al
+            ViewBag.Employees = employees; // Çalışanları ViewBag'e ata
+
+            var services = _context.services.ToList(); // Veritabanından hizmetleri al
+            ViewBag.Services = services; // Services'i ViewBag'e ata
+
+            return View();
         }
-
-        // GET: api/Employee/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Employees>> GetEmployee(int id)
+        [HttpGet("Edit/{id}")]
+        public IActionResult EditEmployee(int id)
         {
-            var employee = await _context.employees.FindAsync(id);
-
+            var employee = _context.employees.FirstOrDefault(e => e.employeeid == id);
             if (employee == null)
             {
-                return NotFound();
+                return NotFound("Çalışan bulunamadı.");
             }
+            // ViewBag'e hizmetler listesini ekleyin
+            ViewBag.Services = new SelectList(_context.services, "serviceid", "service");
 
-            return employee;
+            // Düzenleme sayfasına çalışan verisini gönder
+
+            // Düzenleme sayfasına çalışan verisini gönder
+            return View(employee);
         }
 
-        // POST: api/Employee
+
+        // Yeni çalışan ekle
         [HttpPost]
-        public async Task<ActionResult<Employees>> PostEmployee(Employees employee)
+        public IActionResult AddEmployee(string firstName, string lastName, int serviceId, string skills)
         {
-            _context.employees.Add(employee);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEmployee", new { id = employee.employeeid }, employee);
+            // Yeni çalışan oluştur
+            var newEmployee = new Employees
+            {
+                firstname = firstName,
+                lastname = lastName,
+                skills = skills,
+                serviceid = serviceId,
+                expertise = serviceId.ToString(),
+            };
+
+            // Yeni çalışanı veritabanına ekle
+            _context.employees.Add(newEmployee);
+            _context.SaveChanges();
+
+            ViewBag.SuccessMessage = "Çalışan başarıyla kaydedildi.";
+
+            return RedirectToAction("EmployeeOperations");
         }
-
-        // PUT: api/Employee/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmployee(int id, Employees employee)
+        [HttpPost("Edit/{id}")]
+        public IActionResult EditEmployee(int id, Employees updatedEmployee)
         {
-            if (id != employee.employeeid)
+            if (id != updatedEmployee.employeeid)
             {
-                return BadRequest();
+                return BadRequest("Geçersiz çalışan ID'si.");
             }
 
-            _context.Entry(employee).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EmployeeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE: api/Employee/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEmployee(int id)
-        {
-            var employee = await _context.employees.FindAsync(id);
+            var employee = _context.employees.FirstOrDefault(e => e.employeeid == id);
             if (employee == null)
             {
-                return NotFound();
+                return NotFound("Çalışan bulunamadı.");
             }
 
-            _context.employees.Remove(employee);
-            await _context.SaveChangesAsync();
+            // Güncellenen verileri mevcut çalışan objesine aktar
+            employee.firstname = updatedEmployee.firstname;
+            employee.lastname = updatedEmployee.lastname;
+            employee.skills = updatedEmployee.skills;
+            employee.serviceid = updatedEmployee.serviceid;
+            employee.expertise = updatedEmployee.expertise;
 
-            return NoContent();
+            // Değişiklikleri veritabanına kaydet
+            _context.SaveChanges();
+
+            return RedirectToAction("EmployeeOperations"); // Çalışan listeleme sayfasına yönlendir
         }
-
-        private bool EmployeeExists(int id)
+        [HttpPost("Delete/{id}")]
+        [ActionName("DeleteEmployee")]
+        public IActionResult DeleteEmployee(int id)
         {
-            return _context.employees.Any(e => e.employeeid == id);
+            var employee = _context.employees.FirstOrDefault(e => e.employeeid == id);
+            if (employee == null)
+            {
+                return NotFound("Çalışan bulunamadı.");
+            }
+
+            // Çalışanı veritabanından sil
+            _context.employees.Remove(employee);
+            _context.SaveChanges();
+
+            return RedirectToAction("EmployeeOperations"); // Çalışan listeleme sayfasına yönlendir
         }
+
+
+
     }
 }
