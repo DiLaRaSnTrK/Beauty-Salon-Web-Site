@@ -97,21 +97,8 @@
                     </ul>
                     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
                 </nav>
-                @if (HttpContext.Session.GetString("CustomerId") != null)
-                {
-                    <!-- Kullanıcı giriş yaptıysa Logout linki göster -->
-                    <li>
-                        <a class="btn-book-a-table d-none d-xl-block" asp-controller="Account" asp-action="Login">Log Out</a>
-                    </li>
-                }
-                else
-                {
-                    <!-- Kullanıcı giriş yapmadıysa Login linki göster -->
-                    <li>
-                        <a class="btn-book-a-table d-none d-xl-block" asp-controller="Account" asp-action="Login">Log In</a>
-                    </li>
-                }
-               
+
+                <a class="btn-book-a-table d-none d-xl-block" asp-controller="Account" asp-action="Login" >Log In</a>
 
             </div>
 
