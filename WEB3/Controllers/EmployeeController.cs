@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WEB3.Data;
 using WEB3.Models;
@@ -14,6 +15,7 @@ namespace WEB3.Controllers
             _context = context;
         }
         // Çalışanları listele
+      
         public IActionResult EmployeeOperations()
         {
             var employees = _context.employees.ToList(); // Veritabanından çalışanları al
@@ -107,6 +109,46 @@ namespace WEB3.Controllers
 
             return RedirectToAction("EmployeeOperations"); // Çalışan listeleme sayfasına yönlendir
         }
+     
+        [HttpGet]
+        public IActionResult EmployeePerformance()
+        {
+            var employees = _context.employees.ToList();
+
+            if (employees == null || !employees.Any())
+            {
+                return View(new List<Employees>()); // Boş model gönder
+            }
+
+            var performanceData = employees.Select(employee =>
+            {
+                // Çalışanın randevularını çek
+                var appointments = _context.appointments
+                    .Where(a => a.employeeid == employee.employeeid && a.appointmentdatetime.Date == DateTime.UtcNow.Date)
+                    .ToList();
+
+                // Günlük kazanç toplamı
+                var dailyEarnings = appointments.Sum(a => a.totalprice);
+
+                // Günlük işlem süreleri toplamı
+                var dailyProcessTime = appointments.Sum(a => a.process);
+
+                // Verimlilik hesaplama
+                var productivity = appointments.Sum(a => a.process) / 600.0 * 100;
+
+                return new Employees
+                {
+                    employeeid = employee.employeeid,
+                    EmployeeName = $"{employee.firstname} {employee.lastname}",
+                    DailyEarnings = dailyEarnings,
+                    Productivity = productivity.ToString(),
+                };
+            }).ToList();
+
+            return View(performanceData);
+        }
+
+
 
 
 

@@ -47,6 +47,15 @@ namespace WEB3.Controllers
                 return View();
             }
         }
+        [HttpPost]
+        public IActionResult LogOut()
+        {
+            // Oturumu sonlandır
+            HttpContext.Session.Clear(); // Tüm session verilerini temizler
+
+            // Ana sayfaya yönlendir
+            return RedirectToAction("Login", "Account");
+        }
 
         public IActionResult Register()
         {
@@ -152,6 +161,7 @@ namespace WEB3.Controllers
             }
 
         }
+
     }
 }
 

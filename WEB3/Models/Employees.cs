@@ -29,5 +29,13 @@ namespace WEB3.Models
         // Navigation property for Appointments
         public ICollection<Appointments> appointments { get; set; }
         public Services services { get; set; }  // Employees tablosunda hangi hizmeti verdiğini göstermek için
+
+
+        [NotMapped]
+        public int DailyEarnings { get; set; }
+        [NotMapped]
+        public string EmployeeName { get; set; }
+        [NotMapped]
+        public string Productivity { get; set; }
     }
 }

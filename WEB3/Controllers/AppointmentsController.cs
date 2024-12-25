@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace WEB3.Controllers
 {
- 
+    //[Authorize(Roles = "Customer")]
     public class AppointmentsController : Controller
     {
 
@@ -17,6 +17,7 @@ namespace WEB3.Controllers
         {
             _context = context;
         }
+        
         [HttpGet]
         public IActionResult BookAppointment()
         {

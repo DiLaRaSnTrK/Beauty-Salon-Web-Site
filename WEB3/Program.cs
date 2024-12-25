@@ -22,9 +22,6 @@ builder.Services.AddControllers();
 
 
 
-
-
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 // Add services to the container.

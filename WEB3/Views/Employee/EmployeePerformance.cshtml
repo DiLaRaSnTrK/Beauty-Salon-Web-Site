@@ -1,0 +1,142 @@
+﻿@model List<WEB3.Models.Employees>
+@{
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="preview-list">
+            @if (Model != null && Model.Count > 0)
+            {
+                @foreach (var performance in Model)
+                {
+                    <div class="preview-item border-bottom">
+                        <div class="preview-thumbnail">
+                            <div class="preview-icon bg-primary">
+                                <i class="mdi mdi-account"></i>
+                            </div>
+                        </div>
+                        <div class="preview-item-content d-sm-flex flex-grow">
+                            <div class="flex-grow">
+                                <p class="text-muted mb-0">Employee ID: @performance.employeeid</p>
+                                <h6 class="preview-subject">@performance.EmployeeName</h6>
+                                <p class="text-muted mb-0">Date: @DateTime.UtcNow.ToShortDateString()</p>
+                            </div>
+                            <div class="mr-auto text-sm-right pt-2 pt-sm-0">
+                                <p class="text-muted">Efficiency: %@performance.Productivity</p>
+                                <p class="text-muted mb-0">Daily Earnings: $@performance.DailyEarnings</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No performance data available.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Sayfanın stilini burada yazıyoruz -->
+<style>
+    /* Genel sayfa stili */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Row düzeni */
+    .row {
+        margin: 0;
+        padding: 20px;
+    }
+
+    /* Preview list stil */
+    .preview-list {
+        background-color: black;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+
+    }
+
+    /* Preview item arasındaki boşluk */
+    .preview-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #e0e0e0;
+        color:white;
+    }
+
+    .preview-item:last-child {
+        border-bottom: none;
+    }
+
+    /* Thumbnail kısmı */
+    .preview-thumbnail {
+        margin-right: 20px;
+    }
+
+    .preview-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #3498db;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-size: 24px;
+    }
+
+    /* Preview item content kısmı */
+    .preview-item-content {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* Sol tarafta başlık ve detaylar */
+    .preview-item-content .flex-grow {
+        flex-grow: 1;
+    }
+
+    /* Sağ taraftaki veriler */
+    .text-sm-right {
+        text-align: right;
+    }
+
+    /* Text muted stil */
+    .text-muted {
+        color: white;
+    }
+
+    /* Başlık stil */
+    .preview-subject {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 5px 0;
+    }
+
+    /* Verimlilik ve günlük kazanç metinleri */
+    .text-muted.mb-0 {
+        font-size: 14px;
+    }
+
+    /* Verimlilik ve günlük kazanç için küçük düzenlemeler */
+    p.text-muted {
+        font-size: 16px;
+    }
+
+    /* "No performance data" mesajı */
+    p {
+        color: white;
+        font-size: 16px;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+</style>

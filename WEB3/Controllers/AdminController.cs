@@ -18,7 +18,6 @@ namespace WEB3.Controllers
         {
             _context = context;
         }
-
         public IActionResult Index()
         {
             var appointments = _context.appointments
@@ -41,29 +40,6 @@ namespace WEB3.Controllers
             return View(appointments); // View'e AppointmentViewModel'leri gönderiyoruz.
         }
 
-        public IActionResult ManageServices()
-        {
-            // Hizmet yönetimi sayfası.
-            return View();
-        }
-
-        public IActionResult ManageEmployees()
-        {
-            // Çalışan yönetimi sayfası.
-            return View();
-        }
-
-        public IActionResult ManageAppointments()
-        {
-            // Randevu yönetimi sayfası.
-            return View();
-        }
-
-        public IActionResult ManageSalons()
-        {
-            // Salon yönetimi sayfası.
-            return View();
-        }
     }
 
 }
