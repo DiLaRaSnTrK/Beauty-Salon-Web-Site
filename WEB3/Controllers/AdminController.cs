@@ -39,7 +39,27 @@ namespace WEB3.Controllers
 
             return View(appointments); // View'e AppointmentViewModel'leri gönderiyoruz.
         }
+        [HttpPost]
+        public IActionResult ChangeApprovalStatus(int appointmentId)
+        {
+            // Appointment nesnesini bul
+            var appointment = _context.appointments.FirstOrDefault(a => a.appointmentid == appointmentId);
 
-    }
+            if (appointment != null)
+            {
+                // ApprovalStatus'ü değiştir
+                appointment.approvalstatus = appointment.approvalstatus == "Approved" ? "Unapproved" : "Approved";
 
+                // Değişiklikleri kaydet
+                _context.SaveChanges();
+            }
+
+            // Sayfaya geri dön
+            return RedirectToAction("Index"); // Randevu listesi sayfasına yönlendirin
+
+
+
+        }
 }
+}
+

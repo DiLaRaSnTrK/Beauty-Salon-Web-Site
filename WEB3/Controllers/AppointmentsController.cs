@@ -4,10 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using WEB3.Data;  // DbContext sınıfı
 using WEB3.Models;  // Modeller namespace
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace WEB3.Controllers
 {
     //[Authorize(Roles = "Customer")]
+   
     public class AppointmentsController : Controller
     {
 
@@ -18,6 +22,7 @@ namespace WEB3.Controllers
             _context = context;
         }
         
+
         [HttpGet]
         public IActionResult BookAppointment()
         {
@@ -76,19 +81,8 @@ namespace WEB3.Controllers
             ViewBag.SuccessMessage = "Randevunuz başarıyla oluşturuldu!";
             return RedirectToAction("BookAppointment");
         }
+        
 
-
-
-
-        /*public IActionResult MyAppointments()
-        {
-            int customerId = int.Parse(HttpContext.Session.GetString("CustomerId"));
-            var appointments = _context.appointments
-                .Where(a => a.customerid == customerId)
-                .Include(a => a.employeeid)
-                .ToList();
-            return View(appointments);
-        }*/
     }
 
 }

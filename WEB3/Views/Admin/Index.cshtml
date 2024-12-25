@@ -53,13 +53,21 @@
                                                         <td>
                                                             @if (appointment.approvalstatus == "Approved")
                                                             {
-                                                                <div class="badge badge-outline-success">Onaylı</div>
+                                                                <form method="post" asp-action="ChangeApprovalStatus" asp-controller="Admin">
+                                                                    <input type="hidden" name="appointmentId" value="@appointment.appointmentid" />
+                                                                    <button type="submit" class="btn btn-success btn-sm">Approved</button>
+                                                                </form>
                                                             }
                                                             else
                                                             {
-                                                                <div class="badge badge-outline-danger">Onaysız</div>
+                                                                <form method="post" asp-action="ChangeApprovalStatus" asp-controller="Admin">
+                                                                    <input type="hidden" name="appointmentId" value="@appointment.appointmentid" />
+                                                                    <button type="submit" class="btn btn-danger btn-sm">Unapproved</button>
+                                                                </form>
                                                             }
                                                         </td>
+
+
                                                     </tr>
                                                 }
                                             </tbody>
@@ -71,7 +79,31 @@
                     </div>
                  </div>
             </div>
-      
-    
 
-                   
+
+<style>
+    .btn-sm {
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+        border: none;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+    }
+
+        .btn-success:hover,
+        .btn-danger:hover {
+            opacity: 0.8;
+            cursor: pointer;
+        }
+
+</style>

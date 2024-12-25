@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "My Appointments";
+}
+
+<div class="container mt-5">
+    <h2>My Appointments</h2>
+    <table id="appointmentsTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Appointment ID</th>
+                <th>Appointment Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Randevular burada listelenecek -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    const apiUrl = '/api/myappointments';
+
+    // Sayfa yüklendiğinde çalışanları listele
+    document.addEventListener('DOMContentLoaded', () => {
+        loadMyAppointments();
+    });
+    // Çalışanları listeleme
+    function loadMyAppointments() {
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                let tableBody = document.querySelector('#appointmentsTable tbody');
+                tableBody.innerHTML = '';
+                data.forEach(appointments => {
+                    let row = `
+                                 <tr>
+                                            <td>${appointments.appointmentid}</td>
+                                            <td>${appointments.appointmentdatetime}</td>
+                                            <td>${appointments.approvalstatus}</td>
+                                 </tr>
+                        `;
+                    tableBody.innerHTML += row;
+                });
+            });
+    }
+
+
+</script>

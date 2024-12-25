@@ -32,7 +32,7 @@ namespace WEB3.Models
 
 
         [NotMapped]
-        public int DailyEarnings { get; set; }
+        public int DailyEarning { get; set; }
         [NotMapped]
         public string EmployeeName { get; set; }
         [NotMapped]

@@ -140,7 +140,7 @@ namespace WEB3.Controllers
                 {
                     employeeid = employee.employeeid,
                     EmployeeName = $"{employee.firstname} {employee.lastname}",
-                    DailyEarnings = dailyEarnings,
+                    DailyEarning = dailyEarnings,
                     Productivity = productivity.ToString(),
                 };
             }).ToList();

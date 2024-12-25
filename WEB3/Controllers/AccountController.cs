@@ -34,7 +34,7 @@ namespace WEB3.Controllers
                 HttpContext.Session.SetInt32("CustomerId", customer.customerid);
 
                 // Profil sayfasına yönlendiriyoruz
-                return RedirectToAction("BookAppointment", "Appointments");
+                return RedirectToAction("Profile", "Account");
             }
             else if (admin != null)
             {

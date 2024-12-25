@@ -74,6 +74,10 @@ else
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+app.UseCors(builder =>
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader());
 
 
 // Middleware'leri ekleyin
