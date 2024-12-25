@@ -20,29 +20,50 @@ namespace WEB3.Controllers
         }
         public IActionResult MyAppointments()
         {
+            
             return View();  // EmployeeOperations.cshtml sayfasını render eder
         }
-        // Tüm çalışanları listeleme (GET /api/employee)
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Appointments>>> GetAppointments()
         {
-            var appointment = await _context.appointments.ToListAsync();
-            return Ok(appointment);  // Çalışanları döndür
-        }
+            // Oturumdan CustomerId değerini al
+            int? customerId = HttpContext.Session.GetInt32("CustomerId");
 
-        // Çalışanı ID ile alma (GET /api/employee/{id})
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Appointments>> GetAppointments(int id)
-        {
-            var appointment = await _context.appointments.FindAsync(id);
-
-            if (appointment == null)
+            // Eğer CustomerId yoksa, yetkisiz erişim veya hata mesajı döndür
+            if (customerId == null)
             {
-                return NotFound();  // Eğer çalışan bulunmazsa, 404 döndür
+                return Unauthorized();  // Eğer oturum yoksa, 401 döndür
+            }
+            // Randevuları customerId'ye göre al
+            var appointments = await _context.appointments
+                .Where(a => a.customerid == customerId)
+                .Select(a => new Appointments
+                {
+                    appointmentid = a.appointmentid,
+                    employeeid = a.employeeid,
+                    serviceid = a.serviceid,
+                    appointmentdatetime = a.appointmentdatetime,
+                    totalprice = a.totalprice,
+                    process = a.process,
+                    approvalstatus = a.approvalstatus
+                })
+                .ToListAsync();
+            // Randevuları customerId'ye göre al
+            //var appointments = await _context.appointments
+            //    .Where(a => a.customerid == customerId)
+            //    .ToListAsync();
+
+            // Eğer randevular bulunamazsa, 404 döndür
+            if (appointments == null || !appointments.Any())
+            {
+                return NotFound();  // Randevu bulunamadığında 404 döndür
             }
 
-            return Ok(appointment);  // Çalışanı döndür
+            // Randevuları döndür
+            return Ok(appointments);
         }
+
 
     }
 }
