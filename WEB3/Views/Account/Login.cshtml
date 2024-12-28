@@ -9,10 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    @if (ViewBag.Error != null)
-    {
-        <p style="color:red;">@ViewBag.Error</p>
-    }
     <style>
         body {
             margin: 0;
@@ -38,41 +34,42 @@
             text-align: center;
         }
 
-        .login-form h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #bda2c8;
-        }
+            .login-form h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+                color: #bda2c8;
+            }
 
-        .login-form input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-        }
+            .login-form input,
+            .login-form select {
+                width: 100%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+            }
 
-        .login-form button {
-            width: 100%;
-            padding: 10px;
-            background-color: #bda2c8;
-            border: none;
-            color: white;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+            .login-form button {
+                width: 100%;
+                padding: 10px;
+                background-color: #bda2c8;
+                border: none;
+                color: white;
+                font-size: 16px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
 
-        .login-form button:hover {
-            background-color: #241f29;
-        }
+                .login-form button:hover {
+                    background-color: #241f29;
+                }
 
-
-        .login-form small {
-            display: block;
-            margin-top: 10px;
-        }
+            .login-form small {
+                display: block;
+                margin-top: 10px;
+                color: #fff;
+            }
 
         .remember-forgot {
             display: flex;
@@ -80,18 +77,36 @@
             font-size: 12px;
             margin: 10px 0;
         }
+
+        .error-message {
+            color: red;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="login-form">
             <h1>Log In</h1>
+
+            <!-- Hata Mesajı -->
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <p class="error-message">@ViewBag.ErrorMessage</p>
+            }
+
+            <!-- Giriş Formu -->
             <form asp-action="Login" method="post">
                 <input type="text" name="username" placeholder="User Name" required>
                 <input type="password" name="password" placeholder="Password" required>
-               
+                <select name="role" required>
+                    <option value="Customer">Customer</option>
+                    <option value="Admin">Admin</option>
+                </select>
                 <button type="submit">Log In</button>
             </form>
+
             <small>Don't you have an account? <a asp-action="Register">Sign Up</a></small>
         </div>
     </div>

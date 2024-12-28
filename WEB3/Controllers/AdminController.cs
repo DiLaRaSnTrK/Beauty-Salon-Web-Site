@@ -18,6 +18,7 @@ namespace WEB3.Controllers
         {
             _context = context;
         }
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult Index()
         {
             var appointments = _context.appointments

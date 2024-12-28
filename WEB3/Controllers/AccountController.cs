@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using WEB3.Data;
 using WEB3.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WEB3.Controllers
 {
@@ -20,42 +24,55 @@ namespace WEB3.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(string username, string password, string role)
         {
             // Kullanıcıyı kontrol et
-            var customer = _context.customer
-                .FirstOrDefault(c => c.email == username && c.password == password);
-            var admin = _context.admin
-                .FirstOrDefault(a => a.username == username && a.password == password);
+            if (role == "Customer")
+            {
+                var customer = _context.customer
+                    .FirstOrDefault(c => c.email == username && c.password == password);
 
-            if (customer != null)
-            {
-                // Giriş yapan kullanıcı bilgilerini Session'da saklamak
-                HttpContext.Session.SetInt32("CustomerId", customer.customerid);
+                if (customer != null)
+                {
+                    // Giriş yapan kullanıcı bilgilerini Session'da saklamak
+                    HttpContext.Session.SetInt32("CustomerId", customer.customerid);
 
-                // Profil sayfasına yönlendiriyoruz
-                return RedirectToAction("Profile", "Account");
+                    
+                    // Kullanıcıyı oturum açtır
+                    await SignInUser(customer.email, "Customer");
+
+                  ;
+                    // Profil sayfasına yönlendi    r
+                    return RedirectToAction("Profile", "Account");
+                }
             }
-            else if (admin != null)
+            else if (role == "Admin")
             {
-                // Eğer adminse AdminController'a yönlendir
-                return RedirectToAction("Index", "Admin");
+                var admin = _context.admin
+                    .FirstOrDefault(a => a.username == username && a.password == password);
+
+                if (admin != null)
+                {
+                    // Admini oturum açtır
+                    await SignInUser(admin.username, "Admin");
+
+                    // Admin sayfasına yönlendir
+                    return RedirectToAction("Index", "Admin");
+                }
             }
-            else
-            {
-                ViewBag.ErrorMessage = "Kullanıcı adı veya şifre hatalı.";
-                return View();
-            }
+
+            // Hatalı giriş durumunda mesaj göster
+            ViewBag.ErrorMessage = "Kullanıcı adı, şifre veya rol hatalı.";
+            return View();
         }
-        [HttpPost]
-        public IActionResult LogOut()
-        {
-            // Oturumu sonlandır
-            HttpContext.Session.Clear(); // Tüm session verilerini temizler
 
-            // Ana sayfaya yönlendir
+        [HttpPost]
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
+
 
         public IActionResult Register()
         {
@@ -92,7 +109,7 @@ namespace WEB3.Controllers
 
             return View();
         }
-
+        [Authorize(Policy = "CustomerPolicy")]
         public IActionResult Profile()
         {
             // Session'dan müşteri bilgilerini alıyoruz
@@ -161,7 +178,23 @@ namespace WEB3.Controllers
             }
 
         }
+        private async Task SignInUser(string username, string role)
+        {
+          
+            // Kullanıcı bilgilerini içeren claim'leri oluştur
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, role)
+            };
 
+            // Kullanıcı kimliği oluştur
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            // Kullanıcıyı oturum açtır
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        }
     }
 }
 

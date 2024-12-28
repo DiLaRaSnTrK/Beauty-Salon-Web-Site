@@ -51,9 +51,16 @@ namespace WEB3.Controllers
             }
 
             // Çalışanın seçilen tarih ve saatte uygunluğunu kontrol et
+            var appointmentStart = AppointmentDateTime.ToUniversalTime();
+            var appointmentEnd = appointmentStart.AddMinutes(serviceduration);
+
             var isAvailable = !_context.appointments.Any(a =>
                 a.employeeid == EmployeeId &&
-                a.appointmentdatetime == AppointmentDateTime.ToUniversalTime());
+                (
+                    (a.appointmentdatetime <= appointmentStart && a.appointmentdatetime.AddMinutes(a.process) > appointmentStart) || // Yeni randevu, mevcut bir randevunun başlangıcına denk geliyor
+                    (a.appointmentdatetime < appointmentEnd && a.appointmentdatetime.AddMinutes(a.process) >= appointmentEnd) ||    // Yeni randevu, mevcut bir randevunun bitişine denk geliyor
+                    (a.appointmentdatetime >= appointmentStart && a.appointmentdatetime < appointmentEnd)                          // Yeni randevu, mevcut bir randevunun içine denk geliyor
+                ));
 
             if (!isAvailable)
             {
@@ -70,9 +77,9 @@ namespace WEB3.Controllers
                 serviceid = ServiceId,
                 totalprice = serviceprice,
                 employeeid = EmployeeId,
-                process= serviceduration,
-                approvalstatus="beklemede",
-                appointmentdatetime = AppointmentDateTime.ToUniversalTime()
+                process = serviceduration,
+                approvalstatus = "Unapproved",
+                appointmentdatetime = appointmentStart
             };
 
             _context.appointments.Add(appointment);
@@ -81,7 +88,8 @@ namespace WEB3.Controllers
             ViewBag.SuccessMessage = "Randevunuz başarıyla oluşturuldu!";
             return RedirectToAction("BookAppointment");
         }
-        
+
+
 
     }
 
