@@ -90,12 +90,16 @@ namespace WEB3.Controllers
             return RedirectToAction("BookAppointment");
         }
 
+<<<<<<< HEAD
         [HttpPost]
         public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
+=======
+
+>>>>>>> 49dd744f18eaa23e635ed2c80da975f5149d94bf
 
     }
 
