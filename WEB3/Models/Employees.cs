@@ -23,9 +23,9 @@ namespace WEB3.Models
         public int serviceid { get; set; }
         public decimal? prolificacy { get; set; } // Nullable int
 
-        //public virtual ICollection<EmployeeAvailability> employeeavailability { get; set; }
+  
         // Navigation property for EmployeeAvailability
-        public EmployeeAvailability employeeavailability { get; set; }
+        
         // Navigation property for Appointments
         public ICollection<Appointments> appointments { get; set; }
         public Services services { get; set; }  // Employees tablosunda hangi hizmeti verdiğini göstermek için

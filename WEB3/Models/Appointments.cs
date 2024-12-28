@@ -39,11 +39,7 @@ namespace WEB3.Models
         public string EmployeeName { get; set; }
         [NotMapped]
         public string ServiceName { get; set; }
-        // Navigation property for Customer
-        //public Customer customerids { get; set; }
 
-        // Navigation property for AppointmentStatus
-        //public AppointmentStatus approvalstatuses { get; set; }
 
 
     }
