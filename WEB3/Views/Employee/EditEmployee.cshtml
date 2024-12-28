@@ -1,30 +1,103 @@
 ﻿@model WEB3.Models.Employees
+<div class="container1">
+    <h2>Edit Employee</h2>
 
-<h2>Edit Employee</h2>
+    <form method="post" class="form-container">
+        <input type="hidden" asp-for="employeeid" />
 
-<form method="post">
-    <input type="hidden" asp-for="employeeid" />
-    
-    <div>
-        <label asp-for="firstname">First Name</label>
-        <input type="text" asp-for="firstname" />
+        <div class="form-group">
+            <label asp-for="firstname" class="form-label">First Name</label>
+            <input type="text" asp-for="firstname" class="form-input" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="lastname" class="form-label">Last Name</label>
+            <input type="text" asp-for="lastname" class="form-input" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="skills" class="form-label">Skills</label>
+            <input type="text" asp-for="skills" class="form-input" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="expertise" class="form-label">Expertise</label>
+            <input type="text" asp-for="expertise" class="form-input" />
+        </div>
+
+        <button type="submit" class="submit-button">Save Changes</button>
+    </form>
     </div>
+<style>
+    .container1 {
+        margin-top:130px;
+    }
+    /* Genel form stili */
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
 
-    <div>
-        <label asp-for="lastname">Last Name</label>
-        <input type="text" asp-for="lastname" />
-    </div>
+    /* Başlık stilini güzelleştirme */
+    h2 {
+        text-align: center;
+        color: #bda2c8;
+        margin-bottom: 20px;
+    }
 
-    <div>
-        <label asp-for="skills">Skills</label>
-        <input type="text" asp-for="skills" />
-    </div>
+    /* Form grup stili */
+    .form-group {
+        margin-bottom: 20px;
+    }
 
-    <div>
-        <label asp-for="expertise">Expertise</label>
-        <input type="text" asp-for="expertise" />
-    </div>
+    /* Etiketlerin stilini düzenleme */
+    .form-label {
+        display: block;
+        font-size: 1rem;
+        color: #333;
+        margin-bottom: 8px;
+    }
 
+    /* Input alanlarının stilini düzenleme */
+    .form-input {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
 
-    <button type="submit">Save Changes</button>
-</form>
+        /* Input odaklandığında stil */
+        .form-input:focus {
+            outline: none;
+            border-color: #bda2c8;
+        }
+
+    /* Submit butonu stilini düzenleme */
+    .submit-button {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.1rem;
+        color: #fff;
+        background-color: #bda2c8;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        /* Submit butonu üzerine gelindiğinde stil */
+        .submit-button:hover {
+            background-color: lavender;
+        }
+
+    /* Form elemanları arasındaki boşlukları ayarlama */
+    .form-container input {
+        margin-bottom: 10px;
+    }
+</style>

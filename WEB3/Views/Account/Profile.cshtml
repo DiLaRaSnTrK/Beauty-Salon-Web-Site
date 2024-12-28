@@ -10,19 +10,38 @@
                 <h4 style="color:#bda2c8; margin-left:14px">Profile</h4>
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <a href="#" class="text-decoration-none">Profil Bilgileri</a>
+                        <a href="#" class="text-decoration-none">Profile Information</a>
                     </li>
                     <li class="list-group-item">
-                        <a asp-controller="Appointments" asp-action="BookAppointment" class="text-decoration-none">Randevu Al</a>
+                        <a asp-controller="Appointments" asp-action="BookAppointment" class="text-decoration-none">Book Appointment</a>
                     </li>
                     <li class="list-group-item">
-                        <a asp-controller="MyAppointments" asp-action="MyAppointments" class="text-decoration-none">Randevularım</a>
+                        <a asp-controller="MyAppointments" asp-action="MyAppointments" class="text-decoration-none">My Appointments</a>
                     </li>
                 </ul>
             </div>
         </div>
 
-       
+        <!-- Profile Information Container (Sağda) -->
+        <div class="col-md-9">
+            <div class="container bg-light p-3 rounded">
+                <h4 class="mb-4" style="color:#bda2c8;">Customer Information</h4>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <strong>Name:</strong> @ViewBag.firstname
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Surname:</strong> @ViewBag.lastname
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Email:</strong> @ViewBag.email
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.getElementById("showAppointmentForm").addEventListener("click", function () {
         document.getElementById("appointmentForm").style.display = "block";
@@ -30,18 +49,21 @@
 </script>
 
 <style>
-    .container{
-        margin-top:30px;
+    .container {
+        margin-top: 30px;
+
     }
+
     .sidebar {
-                margin-top: 130px;
+        margin-top: 30px;
+
         background-color: #f8f9fa;
         border: 1px solid #ddd;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .list-group-item {
-        padding: 10px 15px;
+        padding: 10pgpx 15px;
         border: none;
     }
 
@@ -51,5 +73,8 @@
 
     .content {
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .row{
+        margin-top:140px;
     }
 </style>

@@ -71,26 +71,24 @@
 
         @if (ViewBag.Suggestion != null)
         {
-            <p><strong style="color:#bda2c8">Saç Rengi Önerisi:</strong> @ViewBag.Suggestion</p>
+            <p><strong style="color:#bda2c8">Hair Color Suggestion:</strong> @ViewBag.Suggestion</p>
         }
         else
         {
-            <p><strong style="color:#bda2c8">Saç Rengi Önerisi:</strong> Renk bilgisi bulunamadı.</p>
+            <p><strong style="color:#bda2c8">Hair Color Suggestion:</strong> Renk bilgisi bulunamadı.</p>
         }
 
         @if (ViewBag.AvgColor != null)
         {
-            <p><strong style ="color:#bda2c8">Ortalama Renk (RGB):</strong> @ViewBag.AvgColor</p>
+            <p><strong style="color:#bda2c8">Average Skin Undertone Color(RGB):</strong> @ViewBag.AvgColor</p>
 
-            @* Ortalama rengin bir renk kutusunda gösterilmesi *@
-            <div class="color-box" style="background-color: rgb( 151.61152263374487, 170.09426611796982, 207.56537722908092);"></div>
         }
         else
         {
-            <p><strong>Ortalama Renk:</strong> Renk bilgisi bulunamadı.</p>
+            <p><strong>Average Skin Undertone Color(RGB):</strong> Color information not found.</p>
         }
 
-        <a href="/AI/Index" class="btn">Yeni bir resim yükle</a>
+        <a href="/AI/Index" class="btn">Upload a new image</a>
     </div>
 </body>
 </html>

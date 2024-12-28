@@ -24,24 +24,7 @@ namespace WEB3.Controllers
             return View();
         }
        
-        // Kullanıcı Kontrol Paneli (Dashboard)
-        /*public IActionResult Dashboard()
-        {
-            var userEmail = User.Identity.Name; // Giriş yapan kullanıcının email adresi
-            var appointments = _context.Appointments
-                .Where(a => a.customer.Email == userEmail)
-                .ToList();
-
-            return View(appointments);
-        }
-
-        // Profil sayfası
-        public IActionResult Profile()
-        {
-            var userEmail = User.Identity.Name;
-            var user = _context.Customers.FirstOrDefault(c => c.email == userEmail);
-            return View(user);
-        }*/
+        
 
         // GET: api/Customer
         [HttpGet]

@@ -66,40 +66,29 @@
 
                 <nav id="navmenu" class="navmenu">
                     <ul>
-                        <li><a  asp-controller="Home" asp-action="Index" class="active">Home<br></a></li>
-                     
+                        <li><a asp-controller="Home" asp-action="Index" class="active">Home<br></a></li>
                         <li><a href="#about">About Us</a></li>
                         <li><a href="#menu">Services</a></li>
                         <li><a asp-controller="AI" asp-action="Index">H <b style="color:blueviolet">AI</b>R</a></li>
                         <!--<li><a href="#events">Events</a></li>-->
                         <li><a href="#chefs">Our Team</a></li>
                         <li><a href="#gallery">Gallery</a></li>
-                        <!--<li class="dropdown">
-                            <a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                            <ul>
-                                <li><a href="#">Dropdown 1</a></li>
-                                <li class="dropdown">
-                                    <a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                                    <ul>
-                                        <li><a href="#">Deep Dropdown 1</a></li>
-                                        <li><a href="#">Deep Dropdown 2</a></li>
-                                        <li><a href="#">Deep Dropdown 3</a></li>
-                                        <li><a href="#">Deep Dropdown 4</a></li>
-                                        <li><a href="#">Deep Dropdown 5</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">Dropdown 2</a></li>
-                                <li><a href="#">Dropdown 3</a></li>
-                                <li><a href="#">Dropdown 4</a></li>
-                            </ul>
-                        </li>-->
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
                 </nav>
 
-                <a class="btn-book-a-table d-none d-xl-block" asp-controller="Account" asp-action="Login" >Log In</a>
-
+                <!-- Dynamic Login / Logout Button -->
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <form method="post" asp-action="Logout" class="d-none d-xl-block">
+                        <button style="color:#bda2c8"  type="submit" class="btn-book-a-table">Log Out</button>
+                    </form>
+                }
+                else
+                {
+                    <a class="btn-book-a-table d-none d-xl-block" asp-controller="Account" asp-action="Login">Log In</a>
+                }
             </div>
 
         </div>

@@ -56,7 +56,9 @@ namespace WEB3.Controllers
                 lastname = lastName,
                 skills = skills,
                 serviceid = serviceId,
-                expertise = serviceId.ToString(),
+                expertise = skills,
+                prolificacy = 0,
+
             };
 
             // Yeni çalışanı veritabanına ekle
@@ -85,7 +87,7 @@ namespace WEB3.Controllers
             employee.firstname = updatedEmployee.firstname;
             employee.lastname = updatedEmployee.lastname;
             employee.skills = updatedEmployee.skills;
-            employee.serviceid = updatedEmployee.serviceid;
+            employee.serviceid = employee.serviceid;
             employee.expertise = updatedEmployee.expertise;
 
             // Değişiklikleri veritabanına kaydet

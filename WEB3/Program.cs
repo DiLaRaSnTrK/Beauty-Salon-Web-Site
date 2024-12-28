@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using WEB3.Data;
 
@@ -5,21 +6,24 @@ using WEB3.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-// CORS ve diðer servisleri burada ekleyin
-builder.Services.AddCors(options =>
+builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
+    options.AddPolicy("CustomerPolicy", policy => policy.RequireRole("Customer"));
+    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
 });
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Giriþ yapýlmadýðýnda yönlendirilecek yol
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Yetkisiz eriþim için yönlendirme
+    });
+
 
 // Diðer servisleri ekleyin
 builder.Services.AddControllers();
 
+builder.Services.AddHttpClient();
 
 
 // Add services to the container.
@@ -48,6 +52,7 @@ var app = builder.Build();
 app.UseCors("AllowAll");
 
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers(); // API route'larýný etkinleþtirme
@@ -57,7 +62,7 @@ app.UseStaticFiles();
 
 // Oturum ve kimlik doðrulama middleware'leri
 app.UseSession();
-app.UseAuthentication();
+
 
 
 app.MapDefaultControllerRoute(); // Varsayýlan route (MVC kullanýmý için)

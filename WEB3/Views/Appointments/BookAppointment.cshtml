@@ -97,13 +97,13 @@
 <form asp-action="BookAppointment" method="post">
     <div class="getAappointment-container">
         <div class="container">
-            <h1 class="h1">Randevu Al</h1>
+            <h1 class="h1">Book Appointment</h1>
             <form class="form">
                 <div>
-                    <label class="label" for="ServiceId">Hizmet:</label>
+                    <label class="label" for="ServiceId">Service:</label>
                     <select name="ServiceId" id="ServiceId" required class="input" onchange="updateServiceDetails(); filterEmployees();">
 
-                        <option value="">Bir hizmet seçin</option>
+                        <option value="">Select a service</option>
                         @foreach (var service in (List<WEB3.Models.Services>)ViewBag.Services)
                         {
                             <option value="@service.serviceid" data-price="@service.serviceprice" data-duration="@service.serviceduration">@service.servicename</option>
@@ -113,19 +113,19 @@
 
                 <div id="serviceDetails" style="display:none;">
                     <div>
-                        <label class="label" for="serviceprice">Hizmet Fiyatı:</label>
+                        <label class="label" for="serviceprice">Service Price:</label>
                         <input type="text" id="serviceprice" name="serviceprice" class="input" readonly />
                     </div>
                     <div>
-                        <label class="label" for="serviceduration">Hizmet Süresi:</label>
+                        <label class="label" for="serviceduration">Service Duration:</label>
                         <input type="text" id="serviceduration" name="serviceduration" class="input" readonly />
                     </div>
                 </div>
 
                 <div>
-                    <label class="label" for="EmployeeId">Çalışan:</label>
+                    <label class="label" for="EmployeeId">Employee:</label>
                     <select name="EmployeeId" id="EmployeeId" required class="input">
-                        <option value="">Bir çalışan seçin</option>
+                        <option value="">Select an employee</option>
                         @foreach (var employee in (List<WEB3.Models.Employees>)ViewBag.Employees)
                         {
                             <option value="@employee.employeeid" data-serviceid="@employee.serviceid">@employee.firstname @employee.lastname</option>
@@ -134,12 +134,16 @@
                 </div>
 
                 <div>
-                    <label class="label" for="AppointmentDateTime">Tarih ve Saat:</label>
+                    <label class="label" for="AppointmentDateTime">Date & Time:</label>
                     <input type="datetime-local" name="AppointmentDateTime" id="AppointmentDateTime" required class="input" />
                 </div>
                 <div>
-                    <button type="submit" class="button">Randevu Al</button>
+                    <button type="submit" class="button">Book Appointment</button>
                 </div>
+                <br />
+                <li class="list-group-item">
+                    <a asp-controller="MyAppointments" asp-action="MyAppointments" class="text-decoration-none">My Appointments</a>
+                </li>
             </form>
 
             <!-- Eğer hata varsa gösterilecek -->
